@@ -1,5 +1,7 @@
 package com.LatrinaCover.monitoreoBackend.Dto;
 
+import com.LatrinaCover.monitoreoBackend.Entity.Vehiculos;
+
 import java.time.LocalDate;
 
 public class VehiculosDto {
@@ -29,6 +31,22 @@ public class VehiculosDto {
         this.estadoVehiculo = estadoVehiculo;
         this.fechaUltimoMantenimiento = fechaUltimoMantenimiento;
         this.status = status;
+    }
+
+    public static VehiculosDto of(Vehiculos v) {
+        if (v == null) return null;
+        VehiculosDto dto = new VehiculosDto();
+        dto.idVehiculo = v.getIdVehiculo();
+        dto.idDispositivoGps = v.getDispositivo().getIdDispositivo();
+        dto.marca = v.getMarca();
+        dto.placa = v.getPlaca();
+        dto.modelo = v.getModelo();
+        dto.anio = v.getAnio();
+        dto.capacidadKg = v.getCapacidadKg();
+        dto.estadoVehiculo = v.getEstadoVehiculo();
+        dto.fechaUltimoMantenimiento = v.getFechaUltimoMantenimiento();
+        dto.status = v.getStatus();
+        return dto;
     }
 
     public Integer getIdDispositivoGps() {
