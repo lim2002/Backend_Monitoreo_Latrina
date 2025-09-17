@@ -11,7 +11,7 @@ public class UbicacionClientes implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IDDireccionCliente", nullable = false)
-    private Integer idUbicacionCliente;
+    private Short idUbicacionCliente;
 
     @ManyToOne
     @JoinColumn(name = "CliCod", nullable = false)
@@ -29,7 +29,7 @@ public class UbicacionClientes implements Serializable {
     public UbicacionClientes() {
     }
 
-    public UbicacionClientes(Integer idUbicacionCliente, Clientes cliente, String ubicacion, String nombreDireccion, String status) {
+    public UbicacionClientes(Short idUbicacionCliente, Clientes cliente, String ubicacion, String nombreDireccion, String status) {
         this.idUbicacionCliente = idUbicacionCliente;
         this.cliente = cliente;
         this.ubicacion = ubicacion;
@@ -45,11 +45,11 @@ public class UbicacionClientes implements Serializable {
         this.cliente = cliente;
     }
 
-    public Integer getIdUbicacionCliente() {
+    public Short getIdUbicacionCliente() {
         return idUbicacionCliente;
     }
 
-    public void setIdUbicacionCliente(Integer idUbicacionCliente) {
+    public void setIdUbicacionCliente(Short idUbicacionCliente) {
         this.idUbicacionCliente = idUbicacionCliente;
     }
 

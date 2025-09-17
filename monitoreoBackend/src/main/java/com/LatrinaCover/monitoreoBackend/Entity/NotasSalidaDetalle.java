@@ -11,7 +11,7 @@ public class NotasSalidaDetalle implements Serializable {
      @Id
      @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
      @Column(name = "id_nota_salida_detalle", nullable = false)
-     private Integer idNotaSalidaDetalle;
+     private Short idNotaSalidaDetalle;
 
      @ManyToOne
      @JoinColumn(name = "id_salida", nullable = false)
@@ -42,7 +42,7 @@ public class NotasSalidaDetalle implements Serializable {
      public NotasSalidaDetalle() {
      }
 
-     public NotasSalidaDetalle(Integer idNotaSalidaDetalle, NotasSalidas notasSalida, String productoNombre, Productos producto, String productoCodigo, Integer cantidad, String descripcion, Double precioUnitario, Integer status) {
+     public NotasSalidaDetalle(Short idNotaSalidaDetalle, NotasSalidas notasSalida, String productoNombre, Productos producto, String productoCodigo, Integer cantidad, String descripcion, Double precioUnitario, Integer status) {
          this.idNotaSalidaDetalle = idNotaSalidaDetalle;
          this.notasSalida = notasSalida;
          this.productoNombre = productoNombre;
@@ -54,11 +54,11 @@ public class NotasSalidaDetalle implements Serializable {
          this.status = status;
      }
 
-     public Integer getIdNotaSalidaDetalle() {
+     public Short getIdNotaSalidaDetalle() {
          return idNotaSalidaDetalle;
      }
 
-     public void setIdNotaSalidaDetalle(Integer idNotaSalidaDetalle) {
+     public void setIdNotaSalidaDetalle(Short idNotaSalidaDetalle) {
          this.idNotaSalidaDetalle = idNotaSalidaDetalle;
      }
 

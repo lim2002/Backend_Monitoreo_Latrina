@@ -11,7 +11,7 @@ public class Clientes implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CliCod", nullable = false)
-    private Integer idCliente;
+    private Short idCliente;
 
     @Column(name = "CliNom", nullable = false)
     private String nombre;
@@ -34,7 +34,7 @@ public class Clientes implements Serializable {
     public Clientes() {
     }
 
-    public Clientes(Integer idCliente, String nombre, String representante, String telefono, String celular, String fax, String email) {
+    public Clientes(Short idCliente, String nombre, String representante, String telefono, String celular, String fax, String email) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.representante = representante;
@@ -52,11 +52,11 @@ public class Clientes implements Serializable {
         this.representante = representante;
     }
 
-    public Integer getIdCliente() {
+    public Short getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
+    public void setIdCliente(Short idCliente) {
         this.idCliente = idCliente;
     }
 

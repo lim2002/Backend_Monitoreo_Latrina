@@ -2,7 +2,7 @@ package com.LatrinaCover.monitoreoBackend.Dto;
 
 public class NotasSalidaDetalleDto {
 
-    private Integer idNotaSalidaDetalle;
+    private Short idNotaSalidaDetalle;
     private Integer idSalida;
     private String productoNombre;
     private Integer idProducto;
@@ -15,7 +15,7 @@ public class NotasSalidaDetalleDto {
     public NotasSalidaDetalleDto() {
     }
 
-    public NotasSalidaDetalleDto(Integer idNotaSalidaDetalle, Integer idSalida, String productoNombre, Integer idProducto, String productoCodigo, Integer cantidad, String descripcion, Double precioUnitario, Integer status) {
+    public NotasSalidaDetalleDto(Short idNotaSalidaDetalle, Integer idSalida, String productoNombre, Integer idProducto, String productoCodigo, Integer cantidad, String descripcion, Double precioUnitario, Integer status) {
         this.idNotaSalidaDetalle = idNotaSalidaDetalle;
         this.idSalida = idSalida;
         this.productoNombre = productoNombre;
@@ -27,11 +27,11 @@ public class NotasSalidaDetalleDto {
         this.status = status;
     }
 
-    public Integer getIdNotaSalidaDetalle() {
+    public Short getIdNotaSalidaDetalle() {
         return idNotaSalidaDetalle;
     }
 
-    public void setIdNotaSalidaDetalle(Integer idNotaSalidaDetalle) {
+    public void setIdNotaSalidaDetalle(Short idNotaSalidaDetalle) {
         this.idNotaSalidaDetalle = idNotaSalidaDetalle;
     }
 

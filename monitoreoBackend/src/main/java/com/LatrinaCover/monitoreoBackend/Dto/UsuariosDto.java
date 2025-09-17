@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class UsuariosDto {
 
-    private Integer idUsuario;
+    private Short idUsuario;
     private String username;
     private String nombreCompleto;
     private String correo;
@@ -28,7 +28,7 @@ public class UsuariosDto {
 
     public UsuariosDto() {}
 
-    public UsuariosDto(Integer idUsuario, String username, String nombreCompleto, String correo, String celular, String direccion, LocalDate fechaNacimiento, String nroLicencia, String categoria, LocalDateTime fechaExpiracionLicencia) {
+    public UsuariosDto(Short idUsuario, String username, String nombreCompleto, String correo, String celular, String direccion, LocalDate fechaNacimiento, String nroLicencia, String categoria, LocalDateTime fechaExpiracionLicencia) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.nombreCompleto = nombreCompleto;
@@ -57,11 +57,11 @@ public class UsuariosDto {
         return dto;
     }
 
-    public Integer getIdUsuario() {
+    public Short getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
+    public void setIdUsuario(Short idUsuario) {
         this.idUsuario = idUsuario;
     }
 

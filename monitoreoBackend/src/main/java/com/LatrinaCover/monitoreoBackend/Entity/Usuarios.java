@@ -13,7 +13,7 @@ public class Usuarios implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SecUserId", nullable = false)
-    private Integer idUsuario;
+    private Short idUsuario;
 
     @Column(name = "SecUserName", nullable = false)
     private String username;
@@ -46,7 +46,7 @@ public class Usuarios implements Serializable {
     public Usuarios() {
     }
 
-    public Usuarios(Integer idUsuario, String username, String nombreCompleto, String correo, String celular, String direccion, LocalDate fechaNacimiento, String nroLicencia, String categoria, LocalDateTime fechaExpiracionLicencia) {
+    public Usuarios(Short idUsuario, String username, String nombreCompleto, String correo, String celular, String direccion, LocalDate fechaNacimiento, String nroLicencia, String categoria, LocalDateTime fechaExpiracionLicencia) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.nombreCompleto = nombreCompleto;
@@ -59,11 +59,11 @@ public class Usuarios implements Serializable {
         this.fechaExpiracionLicencia = fechaExpiracionLicencia;
     }
 
-    public Integer getIdUsuario() {
+    public Short getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
+    public void setIdUsuario(Short idUsuario) {
         this.idUsuario = idUsuario;
     }
 

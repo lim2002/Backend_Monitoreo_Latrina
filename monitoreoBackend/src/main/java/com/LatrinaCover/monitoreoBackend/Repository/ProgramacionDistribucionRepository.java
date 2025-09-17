@@ -11,6 +11,6 @@ public interface ProgramacionDistribucionRepository extends JpaRepository<Progra
     // Aquí puedes agregar métodos personalizados si es necesario
 
     //MOstrar todas las programaciones de distribucion desde 10/08/2025
-    @Query("SELECT p FROM ProgramacionDistribucion p WHERE p.fechaEntrega >= '2025-08-10' AND p.status = 1" )
-    List<ProgramacionDistribucion> findByFechaProgramada();
+    @Query("SELECT p FROM ProgramacionDistribucion p WHERE p.status = 1" )
+    List<ProgramacionDistribucion> findAll();
 }

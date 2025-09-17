@@ -43,7 +43,7 @@ public class ProgramacionDistribucionBl {
 
     //Ver las programacion de distribucion desde 01/08/2025
     public List<ProgramacionDistribucionLecturaDto> getProgramacionDistribucion(){
-        List<ProgramacionDistribucion> programacionDistribucionList = programacionDistribucionRepository.findByFechaProgramada();
+        List<ProgramacionDistribucion> programacionDistribucionList = programacionDistribucionRepository.findAll();
         List<ProgramacionDistribucionLecturaDto> programacionDistribucionLecturaDtos = new ArrayList<>();
         for (ProgramacionDistribucion programacionDistribucion : programacionDistribucionList) {
             programacionDistribucionLecturaDtos.add(new ProgramacionDistribucionLecturaDto(
