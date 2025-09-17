@@ -1,8 +1,6 @@
 package com.LatrinaCover.monitoreoBackend.Api;
 
-import com.LatrinaCover.monitoreoBackend.Bl.ConductoresBl;
 import com.LatrinaCover.monitoreoBackend.Bl.VehiculosBl;
-import com.LatrinaCover.monitoreoBackend.Dto.ConductoresDto;
 import com.LatrinaCover.monitoreoBackend.Dto.VehiculosDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
