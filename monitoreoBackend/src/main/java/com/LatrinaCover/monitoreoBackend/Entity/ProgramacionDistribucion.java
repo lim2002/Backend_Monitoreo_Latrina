@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -22,7 +23,7 @@ public class ProgramacionDistribucion implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "id_conductor", nullable = false)
-    private Conductores conductor;
+    private Usuarios conductor;
 
     @ManyToOne
     @JoinColumn(name = "id_administrador", nullable = false)
@@ -35,7 +36,7 @@ public class ProgramacionDistribucion implements Serializable {
     private Integer estadoEntrega;
 
     @Column(name = "fecha_entrega", nullable = true)
-    private Date fechaEntrega;
+    private LocalDate fechaEntrega;
 
     @Column(name = "status", nullable = false)
     private Integer status;
@@ -43,7 +44,7 @@ public class ProgramacionDistribucion implements Serializable {
     public ProgramacionDistribucion() {
     }
 
-    public ProgramacionDistribucion(Integer idProgramacion, Vehiculos vehiculo, Conductores conductor, Usuarios administrador, LocalDateTime fechaCreacion, Integer estadoEntrega, Date fechaEntrega, Integer status) {
+    public ProgramacionDistribucion(Integer idProgramacion, Vehiculos vehiculo, Usuarios conductor, Usuarios administrador, LocalDateTime fechaCreacion, Integer estadoEntrega, LocalDate fechaEntrega, Integer status) {
         this.idProgramacion = idProgramacion;
         this.vehiculo = vehiculo;
         this.conductor = conductor;
@@ -70,11 +71,11 @@ public class ProgramacionDistribucion implements Serializable {
         this.vehiculo = vehiculo;
     }
 
-    public Conductores getConductor() {
+    public Usuarios getConductor() {
         return conductor;
     }
 
-    public void setConductor(Conductores conductor) {
+    public void setConductor(Usuarios conductor) {
         this.conductor = conductor;
     }
 
@@ -102,11 +103,11 @@ public class ProgramacionDistribucion implements Serializable {
         this.estadoEntrega = estadoEntrega;
     }
 
-    public Date getFechaEntrega() {
+    public LocalDate getFechaEntrega() {
         return fechaEntrega;
     }
 
-    public void setFechaEntrega(Date fechaEntrega) {
+    public void setFechaEntrega(LocalDate fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
 

@@ -1,5 +1,7 @@
 package com.LatrinaCover.monitoreoBackend.Dto;
 
+import com.LatrinaCover.monitoreoBackend.Entity.Usuarios;
+import com.LatrinaCover.monitoreoBackend.Entity.Vehiculos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
@@ -14,25 +16,47 @@ public class ProgramacionDistribucionLecturaDto {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fechaCreacion;   // si en DB es DATETIME/DATETIME2
-
+    private Integer estadoEntrega;   // o String si prefieres
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaEntrega;        // si en DB es DATE
 
-    private Integer estadoEntrega;   // o String si prefieres
     private Integer status;                // o Boolean/enum
 
     public ProgramacionDistribucionLecturaDto() {
     }
 
-    public ProgramacionDistribucionLecturaDto(Integer idProgramacion, VehiculosDto vehiculo, UsuariosDto conductor, UsuariosDto administrador, LocalDateTime fechaCreacion, LocalDate fechaEntrega, Integer estadoEntrega, Integer status) {
+    public ProgramacionDistribucionLecturaDto(Integer idProgramacion, VehiculosDto vehiculo, UsuariosDto conductor, UsuariosDto administrador, LocalDateTime fechaCreacion, Integer estadoEntrega, LocalDate fechaEntrega, Integer status) {
         this.idProgramacion = idProgramacion;
         this.vehiculo = vehiculo;
         this.conductor = conductor;
         this.administrador = administrador;
         this.fechaCreacion = fechaCreacion;
-        this.fechaEntrega = fechaEntrega;
         this.estadoEntrega = estadoEntrega;
+        this.fechaEntrega = fechaEntrega;
         this.status = status;
+    }
+
+    // **nuevo** constructor que recibe ENTIDADES y convierte adentro:
+    public ProgramacionDistribucionLecturaDto(
+            Integer idProgramacion,
+            Vehiculos vehiculo,
+            Usuarios conductor,
+            Usuarios  administrador,
+            LocalDateTime fechaCreacion,
+            Integer estadoEntrega,
+            LocalDate fechaEntrega,
+            Integer status) {
+
+        this(
+                idProgramacion,
+                VehiculosDto.of(vehiculo),
+                UsuariosDto.of(conductor),
+                UsuariosDto.of(administrador),
+                fechaCreacion,
+                estadoEntrega,
+                fechaEntrega,
+                status
+        );
     }
 
     public Integer getIdProgramacion() {
@@ -107,8 +131,8 @@ public class ProgramacionDistribucionLecturaDto {
                 ", conductor=" + conductor +
                 ", administrador=" + administrador +
                 ", fechaCreacion=" + fechaCreacion +
-                ", fechaEntrega=" + fechaEntrega +
                 ", estadoEntrega=" + estadoEntrega +
+                ", fechaEntrega=" + fechaEntrega +
                 ", status=" + status +
                 '}';
     }

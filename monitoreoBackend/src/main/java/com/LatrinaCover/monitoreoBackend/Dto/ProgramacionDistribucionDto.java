@@ -1,20 +1,27 @@
 package com.LatrinaCover.monitoreoBackend.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class ProgramacionDistribucionDto {
 
     private Integer idProgramacion;
-    private Integer idVehiculo;
-    private Integer idConductor;
-    private Integer idAdministrador;
-    private String fechaCreacion;
+    private VehiculosDto idVehiculo;
+    private UsuariosDto idConductor;
+    private UsuariosDto idAdministrador;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime fechaCreacion;   // si en DB es DATETIME/DATETIME2
     private Integer estadoEntrega;
-    private String fechaEntrega;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaEntrega;        // si en DB es DATE
     private Integer status;
 
     public ProgramacionDistribucionDto() {
     }
 
-    public ProgramacionDistribucionDto(Integer idProgramacion, Integer idVehiculo, Integer idConductor, Integer idAdministrador, String fechaCreacion, Integer estadoEntrega, String fechaEntrega, Integer status) {
+    public ProgramacionDistribucionDto(Integer idProgramacion, VehiculosDto idVehiculo, UsuariosDto idConductor, UsuariosDto idAdministrador, LocalDateTime fechaCreacion, Integer estadoEntrega, LocalDate fechaEntrega, Integer status) {
         this.idProgramacion = idProgramacion;
         this.idVehiculo = idVehiculo;
         this.idConductor = idConductor;
@@ -33,35 +40,35 @@ public class ProgramacionDistribucionDto {
         this.idProgramacion = idProgramacion;
     }
 
-    public Integer getIdVehiculo() {
+    public VehiculosDto getIdVehiculo() {
         return idVehiculo;
     }
 
-    public void setIdVehiculo(Integer idVehiculo) {
+    public void setIdVehiculo(VehiculosDto idVehiculo) {
         this.idVehiculo = idVehiculo;
     }
 
-    public Integer getIdConductor() {
+    public UsuariosDto getIdConductor() {
         return idConductor;
     }
 
-    public void setIdConductor(Integer idConductor) {
+    public void setIdConductor(UsuariosDto idConductor) {
         this.idConductor = idConductor;
     }
 
-    public Integer getIdAdministrador() {
+    public UsuariosDto getIdAdministrador() {
         return idAdministrador;
     }
 
-    public void setIdAdministrador(Integer idAdministrador) {
+    public void setIdAdministrador(UsuariosDto idAdministrador) {
         this.idAdministrador = idAdministrador;
     }
 
-    public String getFechaCreacion() {
+    public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(String fechaCreacion) {
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -73,11 +80,11 @@ public class ProgramacionDistribucionDto {
         this.estadoEntrega = estadoEntrega;
     }
 
-    public String getFechaEntrega() {
+    public LocalDate getFechaEntrega() {
         return fechaEntrega;
     }
 
-    public void setFechaEntrega(String fechaEntrega) {
+    public void setFechaEntrega(LocalDate fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
 
@@ -96,9 +103,9 @@ public class ProgramacionDistribucionDto {
                 ", idVehiculo=" + idVehiculo +
                 ", idConductor=" + idConductor +
                 ", idAdministrador=" + idAdministrador +
-                ", fechaCreacion='" + fechaCreacion + '\'' +
+                ", fechaCreacion=" + fechaCreacion +
                 ", estadoEntrega=" + estadoEntrega +
-                ", fechaEntrega='" + fechaEntrega + '\'' +
+                ", fechaEntrega=" + fechaEntrega +
                 ", status=" + status +
                 '}';
     }

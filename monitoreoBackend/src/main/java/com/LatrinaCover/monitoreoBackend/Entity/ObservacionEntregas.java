@@ -15,7 +15,7 @@ public class ObservacionEntregas implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "id_conductor", nullable = false)
-    private Conductores conductor;
+    private Usuarios conductor;
 
     @ManyToOne
     @JoinColumn(name = "id_salidas_programadas_detalle", nullable = false)
@@ -33,7 +33,7 @@ public class ObservacionEntregas implements Serializable {
     public ObservacionEntregas() {
     }
 
-    public ObservacionEntregas(Integer idObservacionEntrega, Conductores conductor, SalidasProgramadasDetalle salidasProgramadasDetalle, String observacion, String estadoEntrega, Integer status) {
+    public ObservacionEntregas(Integer idObservacionEntrega, Usuarios conductor, SalidasProgramadasDetalle salidasProgramadasDetalle, String observacion, String estadoEntrega, Integer status) {
         this.idObservacionEntrega = idObservacionEntrega;
         this.conductor = conductor;
         this.salidasProgramadasDetalle = salidasProgramadasDetalle;
@@ -50,11 +50,11 @@ public class ObservacionEntregas implements Serializable {
         this.idObservacionEntrega = idObservacionEntrega;
     }
 
-    public Conductores getConductor() {
+    public Usuarios getConductor() {
         return conductor;
     }
 
-    public void setConductor(Conductores conductor) {
+    public void setConductor(Usuarios conductor) {
         this.conductor = conductor;
     }
 
