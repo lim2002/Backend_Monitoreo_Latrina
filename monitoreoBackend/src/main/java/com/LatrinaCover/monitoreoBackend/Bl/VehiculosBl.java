@@ -7,6 +7,7 @@ import com.LatrinaCover.monitoreoBackend.Repository.VehiculosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,27 @@ public class VehiculosBl {
             vehiculosDto.add(new VehiculosDto(vehiculo.getIdVehiculo(), vehiculo.getDispositivo().getIdDispositivo(), vehiculo.getPlaca(), vehiculo.getMarca(), vehiculo.getModelo(), vehiculo.getAnio(), vehiculo.getCapacidadKg(),vehiculo.getEstadoVehiculo(),vehiculo.getFechaUltimoMantenimiento(), vehiculo.getStatus()));
         }
         return vehiculosDto;
+    }
+
+    //obtener todos lo vehiculos disponibles para entrega
+    public List<VehiculosDto> getDisponiblesPorFecha(LocalDate fecha){
+        List<Vehiculos> vehiculos = vehiculosRepository.findDisponiblesParaProgramar(fecha);
+        List<VehiculosDto> out = new ArrayList<>();
+        for (Vehiculos v : vehiculos) {
+            out.add(new VehiculosDto(
+                    v.getIdVehiculo(),
+                    v.getDispositivo().getIdDispositivo(),
+                    v.getPlaca(),
+                    v.getMarca(),
+                    v.getModelo(),
+                    v.getAnio(),
+                    v.getCapacidadKg(),
+                    v.getEstadoVehiculo(),
+                    v.getFechaUltimoMantenimiento(),
+                    v.getStatus()
+            ));
+        }
+        return out;
     }
 
     //Guardar vehiculo

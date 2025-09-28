@@ -16,7 +16,7 @@ public class DispositivosGpsBl {
     private DispositivosGpsRepository dispositivosGpsRepository;
 
     //Guardar dispositivo GPS
-    public void saveDispositivoGps(DispositivosGpsDto dispositivoGpsDto){
+    public DispositivosGpsDto saveDispositivoGps(DispositivosGpsDto dispositivoGpsDto){
         DispositivosGps dispositivosGps = new DispositivosGps();
         dispositivosGps.setCodigo(dispositivoGpsDto.getCodigo());
         dispositivosGps.setModelo(dispositivoGpsDto.getModelo());
@@ -24,6 +24,8 @@ public class DispositivosGpsBl {
         dispositivosGps.setActivo(1);
         dispositivosGps.setStatus(1);
         dispositivosGpsRepository.save(dispositivosGps);
+        dispositivoGpsDto.setIdDispositivo(dispositivosGps.getIdDispositivo());
+        return dispositivoGpsDto;
     }
     //Mostrar dispositivos GPS con  status 1
     public List<DispositivosGpsDto> getDispositivosGps(){

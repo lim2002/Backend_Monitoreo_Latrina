@@ -4,10 +4,15 @@ import com.LatrinaCover.monitoreoBackend.Bl.AuthBl;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(
+        originPatterns = "*",           // acepta cualquier origen
+        allowCredentials = "false",     // no usamos cookies
+        allowedHeaders = { "Authorization", "Content-Type" },
+        methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS },
+        maxAge = 3600
+)
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthApi {
@@ -17,7 +22,7 @@ public class AuthApi {
 
     // autenticarse
     @PostMapping(path = "/login/{id}/{role}/{llave}")
-    public ResponseEntity<ResponseDto<String>> login(Integer id, Integer role, String llave) {
+    public ResponseEntity<ResponseDto<String>> login(@PathVariable Integer id, @PathVariable Integer role, @PathVariable String llave) {
         try {
             if (!"latrina2025".equals(llave)) {
                 return ResponseEntity.status(401).body(new ResponseDto<>(401, null, "Llave de autenticación incorrecta"));

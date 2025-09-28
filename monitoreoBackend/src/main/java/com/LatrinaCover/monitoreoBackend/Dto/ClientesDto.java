@@ -2,7 +2,7 @@ package com.LatrinaCover.monitoreoBackend.Dto;
 
 public class ClientesDto {
 
-    private int idCliente;
+    private Short idCliente;
     private String nombre;
     private String representante;
     private String telefono;
@@ -13,7 +13,7 @@ public class ClientesDto {
     public ClientesDto() {
     }
 
-    public ClientesDto(int idCliente, String nombre, String representante, String telefono, String celular, String fax, String email) {
+    public ClientesDto(Short idCliente, String nombre, String representante, String telefono, String celular, String fax, String email) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.representante = representante;
@@ -23,11 +23,11 @@ public class ClientesDto {
         this.email = email;
     }
 
-    public int getIdCliente() {
+    public Short getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(Short idCliente) {
         this.idCliente = idCliente;
     }
 

@@ -8,6 +8,9 @@ import com.LatrinaCover.monitoreoBackend.Entity.ProgramacionDistribucion;
 import com.LatrinaCover.monitoreoBackend.Entity.Usuarios;
 import com.LatrinaCover.monitoreoBackend.Entity.Vehiculos;
 import com.LatrinaCover.monitoreoBackend.Repository.ProgramacionDistribucionRepository;
+import com.LatrinaCover.monitoreoBackend.Repository.UsuariosRepository;
+import com.LatrinaCover.monitoreoBackend.Repository.VehiculosRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,25 +23,37 @@ public class ProgramacionDistribucionBl {
     @Autowired
     private ProgramacionDistribucionRepository programacionDistribucionRepository;
 
+    @Autowired
+    private VehiculosRepository vehiculosRepository;
+
+    @Autowired
+    private UsuariosRepository usuariosRepository;
+
     //metodos de programacion de distribucion
 
     //agregar programacion de distribucion
-    public void addProgramacionDistribucion(ProgramacionDistribucionDto programacionDistribucionDto) {
-        ProgramacionDistribucion programacionDistribucion = new ProgramacionDistribucion();
-        Vehiculos vehiculo = new Vehiculos();
-        Usuarios conductor = new Usuarios();
-        Usuarios Administrador = new Usuarios();
-        vehiculo.setIdVehiculo(programacionDistribucionDto.getIdVehiculo().getIdVehiculo());
-        conductor.setIdUsuario(programacionDistribucionDto.getIdConductor().getIdUsuario());
-        Administrador.setIdUsuario(programacionDistribucionDto.getIdAdministrador().getIdUsuario());
-        programacionDistribucion.setVehiculo(vehiculo);
-        programacionDistribucion.setConductor(conductor);
-        programacionDistribucion.setAdministrador(Administrador);
-        programacionDistribucion.setFechaCreacion(programacionDistribucionDto.getFechaCreacion());
-        programacionDistribucion.setEstadoEntrega(0); // 0=pendiente, 1=en proceso, 2=entregado
-        programacionDistribucion.setFechaEntrega(programacionDistribucionDto.getFechaEntrega());
-        programacionDistribucion.setStatus(1);
-        programacionDistribucionRepository.save(programacionDistribucion);
+    @Transactional
+    public ProgramacionDistribucionDto addProgramacionDistribucion(ProgramacionDistribucionDto dto) {
+
+        // Traer referencias administradas (proxy) por id
+        Vehiculos vehiculo   = vehiculosRepository.getReferenceById(dto.getIdVehiculo());
+        Usuarios  conductor  = usuariosRepository.getReferenceById(dto.getIdConductor());
+        Usuarios  admin      = usuariosRepository.getReferenceById(dto.getIdAdministrador());
+
+        ProgramacionDistribucion p = new ProgramacionDistribucion();
+        p.setVehiculo(vehiculo);
+        p.setConductor(conductor);
+        p.setAdministrador(admin);
+        p.setFechaCreacion(dto.getFechaCreacion() != null ? dto.getFechaCreacion() : java.time.LocalDateTime.now());
+        p.setEstadoEntrega(0);
+        p.setFechaEntrega(dto.getFechaEntrega());
+        p.setStatus(1);
+
+        p = programacionDistribucionRepository.save(p);
+
+        dto.setIdProgramacion(p.getIdProgramacion());
+        dto.setEstadoEntrega(p.getEstadoEntrega());
+        return dto;
     }
 
     //Ver las programacion de distribucion desde 01/08/2025

@@ -4,11 +4,20 @@ import com.LatrinaCover.monitoreoBackend.Bl.VehiculosBl;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import com.LatrinaCover.monitoreoBackend.Dto.VehiculosDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin(
+        originPatterns = "*",           // acepta cualquier origen
+        allowCredentials = "false",     // no usamos cookies
+        allowedHeaders = { "Authorization", "Content-Type" },
+        methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS },
+        maxAge = 3600
+)
 @RestController
 @RequestMapping("api/v1/vehiculos")
 public class VehiculosApi {
@@ -27,6 +36,16 @@ public class VehiculosApi {
             return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener vehiculos"));
 
         }
+    }
+
+    //Mostrar todos los vehiculos disponibles para entrega
+    @GetMapping("/disponibles/{fecha}")
+    public ResponseEntity<ResponseDto<List<VehiculosDto>>> getDisponiblesPorFecha(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fecha) {
+
+        List<VehiculosDto> vehiculos = vehiculosBl.getDisponiblesPorFecha(fecha);
+        return ResponseEntity.ok(new ResponseDto<>(200, vehiculos, "Vehículos disponibles encontrados"));
     }
 
     //Agregar un vehiculo

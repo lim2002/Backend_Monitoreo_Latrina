@@ -3,141 +3,116 @@ package com.LatrinaCover.monitoreoBackend.Entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
- @Entity
- @Table(name = "notas_salida_detalle")
+@Entity
+ @Table(name = "RecProdLevel1")
 public class NotasSalidaDetalle implements Serializable {
 
      @Id
      @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-     @Column(name = "id_nota_salida_detalle", nullable = false)
+     @Column(name = "RecLin", nullable = false)
      private Short idNotaSalidaDetalle;
 
      @ManyToOne
-     @JoinColumn(name = "id_salida", nullable = false)
+     @JoinColumn(name = "RecNum", nullable = false)
      private NotasSalidas notasSalida;
 
-     @ManyToOne
-     @JoinColumn(name = "id_producto", nullable = false)
-     private Productos producto;
-
-     @Column(name = "producto_nombre", nullable = false)
+     @Column(name = "RecProdNom", nullable = false)
      private String productoNombre;
 
-     @Column(name = "producto_codigo", nullable = false)
+     @Column(name = "RecProdCod", nullable = false)
      private String productoCodigo;
 
-     @Column(name = "cantidad", nullable = false)
-     private Integer cantidad;
+     @Column(name = "RecCan", nullable = false)
+     private BigDecimal cantidad;
 
-     @Column(name = "descripcion", nullable = false)
+     @Column(name = "RecProdUni", nullable = false)
      private String descripcion;
 
-     @Column(name = "precio_unitario", nullable = false)
-     private Double precioUnitario;
+     @Column(name = "SalUnit", nullable = false)
+     private BigDecimal precioUnitario;
 
-     @Column(name = "status", nullable = false)
-     private Integer status;
 
      public NotasSalidaDetalle() {
      }
 
-     public NotasSalidaDetalle(Short idNotaSalidaDetalle, NotasSalidas notasSalida, String productoNombre, Productos producto, String productoCodigo, Integer cantidad, String descripcion, Double precioUnitario, Integer status) {
-         this.idNotaSalidaDetalle = idNotaSalidaDetalle;
-         this.notasSalida = notasSalida;
-         this.productoNombre = productoNombre;
-         this.producto = producto;
-         this.productoCodigo = productoCodigo;
-         this.cantidad = cantidad;
-         this.descripcion = descripcion;
-         this.precioUnitario = precioUnitario;
-         this.status = status;
-     }
+    public NotasSalidaDetalle(Short idNotaSalidaDetalle, NotasSalidas notasSalida, String productoNombre, String productoCodigo, BigDecimal cantidad, String descripcion, BigDecimal precioUnitario) {
+        this.idNotaSalidaDetalle = idNotaSalidaDetalle;
+        this.notasSalida = notasSalida;
+        this.productoNombre = productoNombre;
+        this.productoCodigo = productoCodigo;
+        this.cantidad = cantidad;
+        this.descripcion = descripcion;
+        this.precioUnitario = precioUnitario;
+    }
 
-     public Short getIdNotaSalidaDetalle() {
-         return idNotaSalidaDetalle;
-     }
+    public Short getIdNotaSalidaDetalle() {
+        return idNotaSalidaDetalle;
+    }
 
-     public void setIdNotaSalidaDetalle(Short idNotaSalidaDetalle) {
-         this.idNotaSalidaDetalle = idNotaSalidaDetalle;
-     }
+    public void setIdNotaSalidaDetalle(Short idNotaSalidaDetalle) {
+        this.idNotaSalidaDetalle = idNotaSalidaDetalle;
+    }
 
-     public NotasSalidas getNotasSalida() {
-         return notasSalida;
-     }
+    public NotasSalidas getNotasSalida() {
+        return notasSalida;
+    }
 
-     public void setNotasSalida(NotasSalidas notasSalida) {
-         this.notasSalida = notasSalida;
-     }
+    public void setNotasSalida(NotasSalidas notasSalida) {
+        this.notasSalida = notasSalida;
+    }
 
-     public Productos getProducto() {
-         return producto;
-     }
+    public String getProductoNombre() {
+        return productoNombre;
+    }
 
-     public void setProducto(Productos producto) {
-         this.producto = producto;
-     }
+    public void setProductoNombre(String productoNombre) {
+        this.productoNombre = productoNombre;
+    }
 
-     public String getProductoNombre() {
-         return productoNombre;
-     }
+    public String getProductoCodigo() {
+        return productoCodigo;
+    }
 
-     public void setProductoNombre(String productoNombre) {
-         this.productoNombre = productoNombre;
-     }
+    public void setProductoCodigo(String productoCodigo) {
+        this.productoCodigo = productoCodigo;
+    }
 
-     public String getProductoCodigo() {
-         return productoCodigo;
-     }
+    public BigDecimal getCantidad() {
+        return cantidad;
+    }
 
-     public void setProductoCodigo(String productoCodigo) {
-         this.productoCodigo = productoCodigo;
-     }
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
+    }
 
-     public Integer getCantidad() {
-         return cantidad;
-     }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-     public void setCantidad(Integer cantidad) {
-         this.cantidad = cantidad;
-     }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-     public String getDescripcion() {
-         return descripcion;
-     }
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
 
-     public void setDescripcion(String descripcion) {
-         this.descripcion = descripcion;
-     }
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
 
-     public Double getPrecioUnitario() {
-         return precioUnitario;
-     }
-
-     public void setPrecioUnitario(Double precioUnitario) {
-         this.precioUnitario = precioUnitario;
-     }
-
-     public Integer getStatus() {
-         return status;
-     }
-
-     public void setStatus(Integer status) {
-         this.status = status;
-     }
-
-     @Override
-     public String toString() {
-         return "NotasSalidaDetalle{" +
-                 "idNotaSalidaDetalle=" + idNotaSalidaDetalle +
-                 ", notasSalida=" + notasSalida +
-                 ", producto=" + producto +
-                 ", productoNombre='" + productoNombre + '\'' +
-                 ", productoCodigo='" + productoCodigo + '\'' +
-                 ", cantidad=" + cantidad +
-                 ", descripcion='" + descripcion + '\'' +
-                 ", precioUnitario=" + precioUnitario +
-                 ", status=" + status +
-                 '}';
-     }
- }
+    @Override
+    public String toString() {
+        return "NotasSalidaDetalle{" +
+                "idNotaSalidaDetalle=" + idNotaSalidaDetalle +
+                ", notasSalida=" + notasSalida +
+                ", productoNombre='" + productoNombre + '\'' +
+                ", productoCodigo='" + productoCodigo + '\'' +
+                ", cantidad=" + cantidad +
+                ", descripcion='" + descripcion + '\'' +
+                ", precioUnitario=" + precioUnitario +
+                '}';
+    }
+}

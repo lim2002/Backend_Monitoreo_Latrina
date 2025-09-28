@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(
+        originPatterns = "*",           // acepta cualquier origen
+        allowCredentials = "false",     // no usamos cookies
+        allowedHeaders = { "Authorization", "Content-Type" },
+        methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.OPTIONS },
+        maxAge = 3600
+)
 @RestController
 @RequestMapping("api/v1/dispositivosGps")
 public class DispositivosGpsApi {
@@ -19,8 +26,8 @@ public class DispositivosGpsApi {
     @PostMapping(path = "/add")
     public ResponseEntity<ResponseDto<DispositivosGpsDto>> addDispositivoGps(@RequestBody DispositivosGpsDto dispositivosGpsDto) {
         try {
-            dispositivosGpsBl.saveDispositivoGps(dispositivosGpsDto);
-            return ResponseEntity.ok(new ResponseDto<>(200, dispositivosGpsDto, "Dispositivo GPS agregado correctamente"));
+            DispositivosGpsDto respuestaDto = dispositivosGpsBl.saveDispositivoGps(dispositivosGpsDto);
+            return ResponseEntity.ok(new ResponseDto<>(200, respuestaDto, "Dispositivo GPS agregado correctamente"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al agregar dispositivo GPS"));

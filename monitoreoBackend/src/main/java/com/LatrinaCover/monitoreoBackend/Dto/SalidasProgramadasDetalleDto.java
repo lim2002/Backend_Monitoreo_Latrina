@@ -1,5 +1,7 @@
 package com.LatrinaCover.monitoreoBackend.Dto;
 
+import java.math.BigDecimal;
+
 public class SalidasProgramadasDetalleDto {
 
     private Integer idSalidaProgramadaDetalle;
@@ -9,7 +11,7 @@ public class SalidasProgramadasDetalleDto {
     private String productoCodigo;
     private Integer cantidad;
     private String descripcion;
-    private Double precioUnitario;
+    private BigDecimal precioUnitario;
     private Integer estadoObservacion;
     private Integer estadoEntrega;
     private Integer status;
@@ -17,7 +19,7 @@ public class SalidasProgramadasDetalleDto {
     public SalidasProgramadasDetalleDto() {
     }
 
-    public SalidasProgramadasDetalleDto(Integer idSalidaProgramadaDetalle, Integer idSalidaProgramada, Integer idNotaSalidaDetalle, String productoNombre, String productoCodigo, Integer cantidad, String descripcion, Double precioUnitario, Integer estadoObservacion, Integer estadoEntrega, Integer status) {
+    public SalidasProgramadasDetalleDto(Integer idSalidaProgramadaDetalle, Integer idSalidaProgramada, Integer idNotaSalidaDetalle, String productoNombre, String productoCodigo, Integer cantidad, String descripcion, BigDecimal precioUnitario, Integer estadoObservacion, Integer estadoEntrega, Integer status) {
         this.idSalidaProgramadaDetalle = idSalidaProgramadaDetalle;
         this.idSalidaProgramada = idSalidaProgramada;
         this.idNotaSalidaDetalle = idNotaSalidaDetalle;
@@ -90,11 +92,11 @@ public class SalidasProgramadasDetalleDto {
         this.descripcion = descripcion;
     }
 
-    public Double getPrecioUnitario() {
+    public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(Double precioUnitario) {
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 

@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 public class ProgramacionDistribucionDto {
 
     private Integer idProgramacion;
-    private VehiculosDto idVehiculo;
-    private UsuariosDto idConductor;
-    private UsuariosDto idAdministrador;
+    private Integer idVehiculo;
+    private Short idConductor;
+    private Short idAdministrador;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fechaCreacion;   // si en DB es DATETIME/DATETIME2
     private Integer estadoEntrega;
@@ -21,7 +21,7 @@ public class ProgramacionDistribucionDto {
     public ProgramacionDistribucionDto() {
     }
 
-    public ProgramacionDistribucionDto(Integer idProgramacion, VehiculosDto idVehiculo, UsuariosDto idConductor, UsuariosDto idAdministrador, LocalDateTime fechaCreacion, Integer estadoEntrega, LocalDate fechaEntrega, Integer status) {
+    public ProgramacionDistribucionDto(Integer idProgramacion, Integer idVehiculo, Short idConductor, Short idAdministrador, LocalDateTime fechaCreacion, Integer estadoEntrega, LocalDate fechaEntrega, Integer status) {
         this.idProgramacion = idProgramacion;
         this.idVehiculo = idVehiculo;
         this.idConductor = idConductor;
@@ -40,27 +40,27 @@ public class ProgramacionDistribucionDto {
         this.idProgramacion = idProgramacion;
     }
 
-    public VehiculosDto getIdVehiculo() {
+    public Integer getIdVehiculo() {
         return idVehiculo;
     }
 
-    public void setIdVehiculo(VehiculosDto idVehiculo) {
+    public void setIdVehiculo(Integer idVehiculo) {
         this.idVehiculo = idVehiculo;
     }
 
-    public UsuariosDto getIdConductor() {
+    public Short getIdConductor() {
         return idConductor;
     }
 
-    public void setIdConductor(UsuariosDto idConductor) {
+    public void setIdConductor(Short idConductor) {
         this.idConductor = idConductor;
     }
 
-    public UsuariosDto getIdAdministrador() {
+    public Short getIdAdministrador() {
         return idAdministrador;
     }
 
-    public void setIdAdministrador(UsuariosDto idAdministrador) {
+    public void setIdAdministrador(Short idAdministrador) {
         this.idAdministrador = idAdministrador;
     }
 

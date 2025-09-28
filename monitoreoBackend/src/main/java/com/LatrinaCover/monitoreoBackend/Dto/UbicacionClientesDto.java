@@ -2,8 +2,8 @@ package com.LatrinaCover.monitoreoBackend.Dto;
 
 public class UbicacionClientesDto {
 
-    private Integer idUbicacionCliente;
-    private Integer idCliente;
+    private Short idUbicacionCliente;
+    private ClientesDto cliente;
     private String ubicacion;
     private String nombreDireccion;
     private String status;
@@ -11,28 +11,36 @@ public class UbicacionClientesDto {
     public UbicacionClientesDto() {
     }
 
-    public UbicacionClientesDto(Integer idUbicacionCliente, Integer idCliente, String ubicacion, String nombreDireccion, String status) {
+    public UbicacionClientesDto(Short idUbicacionCliente, ClientesDto idCliente, String ubicacion, String nombreDireccion, String status) {
         this.idUbicacionCliente = idUbicacionCliente;
-        this.idCliente = idCliente;
+        this.cliente = idCliente;
         this.ubicacion = ubicacion;
         this.nombreDireccion = nombreDireccion;
         this.status = status;
     }
 
-    public Integer getIdUbicacionCliente() {
+    public Short getIdUbicacionCliente() {
         return idUbicacionCliente;
     }
 
-    public void setIdUbicacionCliente(Integer idUbicacionCliente) {
+    public void setIdUbicacionCliente(Short idUbicacionCliente) {
         this.idUbicacionCliente = idUbicacionCliente;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
+    public ClientesDto getIdCliente() {
+        return cliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public void setIdCliente(ClientesDto idCliente) {
+        this.cliente = idCliente;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getNombreDireccion() {
@@ -55,7 +63,7 @@ public class UbicacionClientesDto {
     public String toString() {
         return "UbicacionClientesDto{" +
                 "idUbicacionCliente=" + idUbicacionCliente +
-                ", idCliente=" + idCliente +
+                ", cliente=" + cliente +
                 ", ubicacion='" + ubicacion + '\'' +
                 ", nombreDireccion='" + nombreDireccion + '\'' +
                 ", status='" + status + '\'' +

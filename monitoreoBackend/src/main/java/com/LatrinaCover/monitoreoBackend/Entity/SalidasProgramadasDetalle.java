@@ -3,6 +3,7 @@ package com.LatrinaCover.monitoreoBackend.Entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "salidas_programadas_detalle")
@@ -16,6 +17,10 @@ public class SalidasProgramadasDetalle implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_salida_programada", nullable = false)
     private SalidasProgramadas salidaProgramada;
+
+    @ManyToOne
+    @JoinColumn(name = "id_nota_salida", nullable = false)
+    private NotasSalidas notaSalida;
 
     @ManyToOne
     @JoinColumn(name = "id_nota_salida_detalle", nullable = false)
@@ -34,7 +39,7 @@ public class SalidasProgramadasDetalle implements Serializable {
     private String descripcion;
 
     @Column(name = "precio_unitario", nullable = false)
-    private Double precioUnitario;
+    private BigDecimal precioUnitario;
 
     @Column(name = "estado_observacion")
     private Integer estadoObservacion;
@@ -48,9 +53,10 @@ public class SalidasProgramadasDetalle implements Serializable {
     public SalidasProgramadasDetalle() {
     }
 
-    public SalidasProgramadasDetalle(Integer idSalidaProgramadaDetalle, SalidasProgramadas salidaProgramada, NotasSalidaDetalle notaSalidaDetalle, String productoNombre, String productoCodigo, Integer cantidad, String descripcion, Double precioUnitario, Integer estadoObservacion, Integer estadoEntrega, Integer status) {
+    public SalidasProgramadasDetalle(Integer idSalidaProgramadaDetalle, SalidasProgramadas salidaProgramada, NotasSalidas notaSalida, NotasSalidaDetalle notaSalidaDetalle, String productoNombre, String productoCodigo, Integer cantidad, String descripcion, BigDecimal precioUnitario, Integer estadoObservacion, Integer estadoEntrega, Integer status) {
         this.idSalidaProgramadaDetalle = idSalidaProgramadaDetalle;
         this.salidaProgramada = salidaProgramada;
+        this.notaSalida = notaSalida;
         this.notaSalidaDetalle = notaSalidaDetalle;
         this.productoNombre = productoNombre;
         this.productoCodigo = productoCodigo;
@@ -60,6 +66,14 @@ public class SalidasProgramadasDetalle implements Serializable {
         this.estadoObservacion = estadoObservacion;
         this.estadoEntrega = estadoEntrega;
         this.status = status;
+    }
+
+    public NotasSalidas getNotaSalida() {
+        return notaSalida;
+    }
+
+    public void setNotaSalida(NotasSalidas notaSalida) {
+        this.notaSalida = notaSalida;
     }
 
     public Integer getIdSalidaProgramadaDetalle() {
@@ -118,11 +132,11 @@ public class SalidasProgramadasDetalle implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Double getPrecioUnitario() {
+    public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(Double precioUnitario) {
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
@@ -155,6 +169,7 @@ public class SalidasProgramadasDetalle implements Serializable {
         return "SalidasProgramadasDetalle{" +
                 "idSalidaProgramadaDetalle=" + idSalidaProgramadaDetalle +
                 ", salidaProgramada=" + salidaProgramada +
+                ", notaSalida=" + notaSalida +
                 ", notaSalidaDetalle=" + notaSalidaDetalle +
                 ", productoNombre='" + productoNombre + '\'' +
                 ", productoCodigo='" + productoCodigo + '\'' +

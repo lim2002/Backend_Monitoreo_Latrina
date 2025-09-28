@@ -19,7 +19,7 @@ public class SalidasProgramadas implements Serializable {
     private ProgramacionDistribucion programacion;
 
     @ManyToOne
-    @JoinColumn(name = "id_nota_salida", nullable = false)
+    @JoinColumn(name = "id_nota_salida", nullable = false, referencedColumnName = "RecNum")
     private NotasSalidas notaSalida;
 
     @ManyToOne
@@ -42,7 +42,7 @@ public class SalidasProgramadas implements Serializable {
     @Column(name = "ubicacion_entrega", nullable = true)
     private String ubicacionEntrega;
 
-    @Column(name = "fecha_entrega_confirmada", nullable = false)
+    @Column(name = "fecha_entrega_confirmada", nullable = true)
     private String fechaEntregaConfirmada;
 
     @Column(name = "status", nullable = false)

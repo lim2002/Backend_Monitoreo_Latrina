@@ -1,43 +1,29 @@
-package com.LatrinaCover.monitoreoBackend.Entity;
+package com.LatrinaCover.monitoreoBackend.Dto;
 
-import jakarta.persistence.*;
-
-import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
-@Table(name = "RecProd")
-public class NotasSalidas implements Serializable {
+public class NotaSalidaMasterAddDto {
 
-    @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    @Column(name = "RecNum", nullable = false)
     private Integer idNotaSalida;
+    /** Cliente dueño de la nota de salida */
+    private ClientesDto cliente;
+    /** Todas las ubicaciones del cliente */
+    private UbicacionClientesDto ubicaciones;
 
-    @ManyToOne
-    @JoinColumn(name = "CliCod", nullable = false)
-    private Clientes cliente;
-
-    @Column(name = "RecNumEgr", nullable = false)
     private Integer nroSalida;
-
-    @Column(name = "RecNumPedido", nullable = false)
     private Integer codigoPedido;
-
-    @Column(name = "RecFecAprobada", nullable = false)
     private LocalDateTime fechaSalidaAprobada;
-
-    @Column(name = "RecFec", nullable = false)
     private LocalDateTime fechaSalida;
 
-    public NotasSalidas() {
+    public NotaSalidaMasterAddDto() {
     }
 
-    public NotasSalidas(Integer idNotaSalida, Clientes cliente, Integer nroSalida, Integer codigoPedido, LocalDateTime fechaSalidaAprobada, LocalDateTime fechaSalida) {
+    public NotaSalidaMasterAddDto(Integer idNotaSalida, ClientesDto cliente, UbicacionClientesDto ubicaciones, Integer nroSalida, Integer codigoPedido, LocalDateTime fechaSalidaAprobada, LocalDateTime fechaSalida) {
         this.idNotaSalida = idNotaSalida;
         this.cliente = cliente;
+        this.ubicaciones = ubicaciones;
         this.nroSalida = nroSalida;
         this.codigoPedido = codigoPedido;
         this.fechaSalidaAprobada = fechaSalidaAprobada;
@@ -52,12 +38,20 @@ public class NotasSalidas implements Serializable {
         this.idNotaSalida = idNotaSalida;
     }
 
-    public Clientes getCliente() {
+    public ClientesDto getCliente() {
         return cliente;
     }
 
-    public void setCliente(Clientes cliente) {
+    public void setCliente(ClientesDto cliente) {
         this.cliente = cliente;
+    }
+
+    public UbicacionClientesDto getUbicaciones() {
+        return ubicaciones;
+    }
+
+    public void setUbicaciones(UbicacionClientesDto ubicaciones) {
+        this.ubicaciones = ubicaciones;
     }
 
     public Integer getNroSalida() {
@@ -94,9 +88,10 @@ public class NotasSalidas implements Serializable {
 
     @Override
     public String toString() {
-        return "NotasSalidas{" +
+        return "NotaSalidaMasterAddDto{" +
                 "idNotaSalida=" + idNotaSalida +
                 ", cliente=" + cliente +
+                ", ubicaciones=" + ubicaciones +
                 ", nroSalida=" + nroSalida +
                 ", codigoPedido=" + codigoPedido +
                 ", fechaSalidaAprobada=" + fechaSalidaAprobada +
