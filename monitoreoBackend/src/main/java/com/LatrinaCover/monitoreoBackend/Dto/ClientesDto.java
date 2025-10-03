@@ -79,6 +79,26 @@ public class ClientesDto {
         this.representante = representante;
     }
 
+    private static Short toShort(Number n) {
+        return n == null ? null : n.shortValue();
+    }
+
+    public static ClientesDto of(com.LatrinaCover.monitoreoBackend.Entity.Clientes e) {
+        if (e == null) return null;
+
+        Short id = (e.getIdCliente() instanceof Number) ? toShort((Number) e.getIdCliente()) : null;
+
+        return new ClientesDto(
+                id,
+                e.getNombre(),
+                e.getRepresentante(),
+                e.getTelefono(),
+                e.getCelular(),
+                e.getFax(),
+                e.getEmail()
+        );
+    }
+
     @Override
     public String toString() {
         return "ClientesDto{" +

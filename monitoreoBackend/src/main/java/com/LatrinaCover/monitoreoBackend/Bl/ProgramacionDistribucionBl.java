@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +75,29 @@ public class ProgramacionDistribucionBl {
         }
         return programacionDistribucionLecturaDtos;
     }
+
+    //Mostrar todas la programacion de dsitribucion
+    @Transactional
+    public List<ProgramacionDistribucionLecturaDto> getAllProgramacionDistribucion(
+            Integer nro, LocalDate desde, LocalDate hasta) {
+
+        List<ProgramacionDistribucion> list =
+                programacionDistribucionRepository.findAllByIdAndFecha(nro, desde, hasta);
+
+        return list.stream()
+                .map(p -> new ProgramacionDistribucionLecturaDto(
+                        p.getIdProgramacion(),
+                        p.getVehiculo(),         // se convierte a VehiculosDto adentro
+                        p.getConductor(),        // se convierte a UsuariosDto adentro
+                        p.getAdministrador(),    // se convierte a UsuariosDto adentro
+                        p.getFechaCreacion(),
+                        p.getEstadoEntrega(),
+                        p.getFechaEntrega(),
+                        p.getStatus()
+                ))
+                .toList();
+    }
+
 
 
 

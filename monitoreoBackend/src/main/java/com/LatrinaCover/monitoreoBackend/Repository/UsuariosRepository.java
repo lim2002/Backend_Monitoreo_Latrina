@@ -41,5 +41,19 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, Short> {
         """, nativeQuery = true)
     List<Usuarios> findConductoresDisponibles(@Param("fecha") LocalDate fecha);
 
+    //obtener todos los usuarios conductores
+    @Query(value = """
+        SELECT DISTINCT u.*
+        FROM SecUser u
+        JOIN SecUserRole ur ON ur.SecUserId = u.SecUserId
+        WHERE ur.SecRoleId = 104
+          AND (
+                :q IS NULL OR LTRIM(RTRIM(:q)) = ''
+                OR UPPER(u.SecUserNameFill) LIKE UPPER(CONCAT('%', :q, '%'))
+          )
+        ORDER BY u.SecUserNameFill
+        """, nativeQuery = true)
+    List<Usuarios> findConductoresAllOrByNombre(@Param("q") String q);
+
 
 }

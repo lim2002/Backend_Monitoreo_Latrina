@@ -1,5 +1,6 @@
 package com.LatrinaCover.monitoreoBackend.Api;
 
+import com.LatrinaCover.monitoreoBackend.Bl.AuthBl;
 import com.LatrinaCover.monitoreoBackend.Bl.UsuariosBl;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import com.LatrinaCover.monitoreoBackend.Dto.UsuariosDto;
@@ -25,9 +26,26 @@ public class UsuariosApi {
     @Autowired
     private UsuariosBl usuariosBl;
 
+    @Autowired
+    private AuthBl authBl;
+
     //obtener todos lo usuarios conductores disponibles
     @GetMapping(path = "/conductores/disponibles/{fecha}")
-    public ResponseEntity<ResponseDto<List<UsuariosDto>>> getAllConductoresDisponibles(@PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha) {
+    public ResponseEntity<ResponseDto<List<UsuariosDto>>> getAllConductoresDisponibles(@PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fecha, @RequestHeader ("Authorization") String auth) {
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_ADMINISTRADOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
         List<UsuariosDto> usuarios = usuariosBl.getAllConductoresDisponibles(fecha);
         try {
             return ResponseEntity.ok(new ResponseDto<>(200, usuarios, "Conductores disponibles encontrados"));
@@ -36,4 +54,64 @@ public class UsuariosApi {
             return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener conductores disponibles"));
         }
     }
+
+    //obtener todos los usuarios conductores o filtrar por nombre
+    @GetMapping(path = "/conductores/{q}")
+    public ResponseEntity<ResponseDto<List<UsuariosDto>>> getAllOrByNombreConductores(@PathVariable String q, @RequestHeader ("Authorization") String auth) {
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_ADMINISTRADOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
+        List<UsuariosDto> usuarios = usuariosBl.getAllOrByNombreConductores(q);
+        try {
+            return ResponseEntity.ok(new ResponseDto<>(200, usuarios, "Conductores encontrados"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener conductores"));
+        }
+    }
+
+    //obtener usuario por idUsuario
+    @GetMapping(path = "/{idUsuario}")
+    public ResponseEntity<ResponseDto<UsuariosDto>> getByIdUsuario(@RequestHeader("Authorization") String auth, @PathVariable Integer idUsuario) {
+
+        // Autoriza a AMBOS (ADMIN + CONDUCTOR).
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_ADMINISTRADOR,
+                AuthBl.ROLE_CONDUCTOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
+        UsuariosDto usuario = usuariosBl.getByIdUsuario(idUsuario);
+        try {
+            if (usuario != null) {
+                return ResponseEntity.ok(new ResponseDto<>(200, usuario, "Usuario encontrado"));
+            } else {
+                return ResponseEntity.status(404).body(new ResponseDto<>(404, null, "Usuario no encontrado"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener usuario"));
+        }
+    }
+
 }

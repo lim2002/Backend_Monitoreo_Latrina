@@ -1,8 +1,6 @@
 package com.LatrinaCover.monitoreoBackend.Bl;
 
-import com.LatrinaCover.monitoreoBackend.Dto.NotaSalidaMasterAddDto;
-import com.LatrinaCover.monitoreoBackend.Dto.NotaSalidaMasterDto;
-import com.LatrinaCover.monitoreoBackend.Dto.NotasSalidasDto;
+import com.LatrinaCover.monitoreoBackend.Dto.*;
 import com.LatrinaCover.monitoreoBackend.Entity.*;
 import com.LatrinaCover.monitoreoBackend.Repository.*;
 import com.LatrinaCover.monitoreoBackend.Servicios.GeoUtils;
@@ -122,6 +120,28 @@ public class SalidasProgramadasBl {
         }
 
 
+    }
+
+    //obtener las salidas programadas por id de programacion
+    @Transactional
+    public List<SalidasProgramadasDto> getSalidasProgramadasByIdProgramacion(Integer idProgramacion){
+        List<SalidasProgramadas> list = salidasProgramadasRepository.findByIdProgramacion(idProgramacion);
+        System.out.println(list.size());
+        return list.stream()
+                .map(sp -> new SalidasProgramadasDto(
+                        sp.getIdSalidaProgramada(),
+                        sp.getProgramacion().getIdProgramacion(),
+                        sp.getNotaSalida().getIdNotaSalida(),
+                        ClientesDto.of(sp.getCliente()),
+                        UbicacionClientesDto.of(sp.getUbicacionCliente()),
+                        sp.getNroSalida(),
+                        sp.getEstadoEntrega(),
+                        sp.getOrdenPrioridadRuta(),
+                        sp.getUbicacionEntrega(),
+                        sp.getFechaEntregaConfirmada(), // <--
+                        sp.getStatus()
+                ))
+                .toList();
     }
 
 }

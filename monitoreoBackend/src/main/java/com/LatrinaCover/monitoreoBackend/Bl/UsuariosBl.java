@@ -26,4 +26,24 @@ public class UsuariosBl {
         return conductores;
     }
 
+    //obtener todos los usuarios conductores o filtrar por nombre
+    public List<UsuariosDto> getAllOrByNombreConductores(String q){
+        List<UsuariosDto> conductores = new ArrayList<>();
+        List<Usuarios> usuarios = usuariosRepository.findConductoresAllOrByNombre(q);
+        for (Usuarios usuario : usuarios) {
+            conductores.add(new UsuariosDto(usuario.getIdUsuario(), usuario.getUsername(), usuario.getNombreCompleto(), usuario.getCorreo(), usuario.getCelular(), usuario.getDireccion(), usuario.getFechaNacimiento(), usuario.getNroLicencia(), usuario.getCategoria(),usuario.getFechaExpiracionLicencia()));
+        }
+        return conductores;
+    }
+
+    //obtener usuario por idUsuario
+    public UsuariosDto getByIdUsuario(Integer idUsuario){
+        Usuarios usuario = usuariosRepository.findByIdUsuario(idUsuario);
+        if (usuario != null) {
+            return new UsuariosDto(usuario.getIdUsuario(), usuario.getUsername(), usuario.getNombreCompleto(), usuario.getCorreo(), usuario.getCelular(), usuario.getDireccion(), usuario.getFechaNacimiento(), usuario.getNroLicencia(), usuario.getCategoria(),usuario.getFechaExpiracionLicencia());
+        } else {
+            return null;
+        }
+    }
+
 }

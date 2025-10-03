@@ -3,6 +3,7 @@ package com.LatrinaCover.monitoreoBackend.Bl;
 import com.LatrinaCover.monitoreoBackend.Dto.VehiculosDto;
 import com.LatrinaCover.monitoreoBackend.Entity.DispositivosGps;
 import com.LatrinaCover.monitoreoBackend.Entity.Vehiculos;
+import com.LatrinaCover.monitoreoBackend.Repository.DispositivosGpsRepository;
 import com.LatrinaCover.monitoreoBackend.Repository.VehiculosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,32 @@ public class VehiculosBl {
     @Autowired
     private VehiculosRepository vehiculosRepository;
 
+    @Autowired
+    private DispositivosGpsRepository dispositivosGpsRepository;
+
     //mostrar todos los vehiculos
-    public List<VehiculosDto> getAllVehiculos(){
-        List<Vehiculos> vehiculos = vehiculosRepository.findAllVehiculos();
+    public List<VehiculosDto> getAllVehiculos(String placaOrModelo){
+        List<Vehiculos> vehiculos;
+        if (placaOrModelo.equals("all")){
+            vehiculos = vehiculosRepository.findAllVehiculos();
+        }else {
+            vehiculos = vehiculosRepository.findAllOrFilterByPlacaOrModelo(placaOrModelo);
+        }
+
         List<VehiculosDto> vehiculosDto = new ArrayList<>();
         for (Vehiculos vehiculo : vehiculos) {
-            vehiculosDto.add(new VehiculosDto(vehiculo.getIdVehiculo(), vehiculo.getDispositivo().getIdDispositivo(), vehiculo.getPlaca(), vehiculo.getMarca(), vehiculo.getModelo(), vehiculo.getAnio(), vehiculo.getCapacidadKg(),vehiculo.getEstadoVehiculo(),vehiculo.getFechaUltimoMantenimiento(), vehiculo.getStatus()));
+            vehiculosDto.add(new VehiculosDto(
+                    vehiculo.getIdVehiculo(),
+                    vehiculo.getDispositivo().getIdDispositivo(),
+                    vehiculo.getMarca(),                 // marca correcto
+                    vehiculo.getPlaca(),                 // placa correcto
+                    vehiculo.getModelo(),
+                    vehiculo.getAnio(),
+                    vehiculo.getCapacidadKg(),
+                    vehiculo.getEstadoVehiculo(),
+                    vehiculo.getFechaUltimoMantenimiento(),
+                    vehiculo.getStatus()
+            ));
         }
         return vehiculosDto;
     }
@@ -48,6 +69,8 @@ public class VehiculosBl {
         return out;
     }
 
+
+
     //Guardar vehiculo
     public void saveVehiculo(VehiculosDto vehiculoDto){
         DispositivosGps dispositivo = new DispositivosGps();
@@ -63,6 +86,10 @@ public class VehiculosBl {
         vehiculo.setFechaUltimoMantenimiento(vehiculoDto.getFechaUltimoMantenimiento());
         vehiculo.setStatus(1);
         vehiculosRepository.save(vehiculo);
+
+        DispositivosGps dispositivoActualizado = dispositivosGpsRepository.findByIdDispositivoGps(vehiculoDto.getIdDispositivoGps());
+        dispositivoActualizado.setActivo(2); // 2=asignado a un vehiculo
+        dispositivosGpsRepository.save(dispositivoActualizado);
     }
 
     // Modificar vehiculo

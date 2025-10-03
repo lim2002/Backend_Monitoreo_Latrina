@@ -43,7 +43,7 @@ public class SalidasProgramadas implements Serializable {
     private String ubicacionEntrega;
 
     @Column(name = "fecha_entrega_confirmada", nullable = true)
-    private String fechaEntregaConfirmada;
+    private LocalDateTime fechaEntregaConfirmada;
 
     @Column(name = "status", nullable = false)
     private Integer status;
@@ -51,7 +51,7 @@ public class SalidasProgramadas implements Serializable {
     public SalidasProgramadas() {
     }
 
-    public SalidasProgramadas(Integer idSalidaProgramada, ProgramacionDistribucion programacion, NotasSalidas notaSalida, Clientes cliente, UbicacionClientes ubicacionCliente, String nroSalida, Integer estadoEntrega, Integer ordenPrioridadRuta, String ubicacionEntrega, String fechaEntregaConfirmada, Integer status) {
+    public SalidasProgramadas(Integer idSalidaProgramada, ProgramacionDistribucion programacion, NotasSalidas notaSalida, Clientes cliente, UbicacionClientes ubicacionCliente, String nroSalida, Integer estadoEntrega, Integer ordenPrioridadRuta, String ubicacionEntrega, LocalDateTime fechaEntregaConfirmada, Integer status) {
         this.idSalidaProgramada = idSalidaProgramada;
         this.programacion = programacion;
         this.notaSalida = notaSalida;
@@ -137,11 +137,11 @@ public class SalidasProgramadas implements Serializable {
         this.ubicacionEntrega = ubicacionEntrega;
     }
 
-    public String getFechaEntregaConfirmada() {
+    public LocalDateTime getFechaEntregaConfirmada() {
         return fechaEntregaConfirmada;
     }
 
-    public void setFechaEntregaConfirmada(String fechaEntregaConfirmada) {
+    public void setFechaEntregaConfirmada(LocalDateTime fechaEntregaConfirmada) {
         this.fechaEntregaConfirmada = fechaEntregaConfirmada;
     }
 

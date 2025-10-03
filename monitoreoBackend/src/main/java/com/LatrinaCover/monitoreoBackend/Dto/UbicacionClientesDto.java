@@ -27,13 +27,8 @@ public class UbicacionClientesDto {
         this.idUbicacionCliente = idUbicacionCliente;
     }
 
-    public ClientesDto getIdCliente() {
-        return cliente;
-    }
-
-    public void setIdCliente(ClientesDto idCliente) {
-        this.cliente = idCliente;
-    }
+    public ClientesDto getCliente() { return cliente; }
+    public void setCliente(ClientesDto cliente) { this.cliente = cliente; }
 
     public String getStatus() {
         return status;
@@ -57,6 +52,25 @@ public class UbicacionClientesDto {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    private static Short toShort(Number n) {
+        return n == null ? null : n.shortValue();
+    }
+
+    public static UbicacionClientesDto of(com.LatrinaCover.monitoreoBackend.Entity.UbicacionClientes e) {
+        if (e == null) return null;
+
+        // Funciona tanto si getIdUbicacionCliente() devuelve Short como Integer
+        Short idUb = toShort((Number) e.getIdUbicacionCliente());
+
+        return new UbicacionClientesDto(
+                idUb,
+                ClientesDto.of(e.getCliente()),
+                e.getUbicacion(),
+                e.getNombreDireccion(),
+                e.getStatus()
+        );
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.LatrinaCover.monitoreoBackend.Api;
 
 
+import com.LatrinaCover.monitoreoBackend.Bl.AuthBl;
 import com.LatrinaCover.monitoreoBackend.Bl.NotasSalidasBl;
 import com.LatrinaCover.monitoreoBackend.Dto.NotaSalidaMasterDto;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
@@ -24,8 +25,26 @@ public class NotasSalidasApi {
     @Autowired
     private NotasSalidasBl notasSalidasBl;
 
+    @Autowired
+    private AuthBl authBl;
+
     @GetMapping(path = "/obtener")
-    public ResponseEntity<ResponseDto<List<NotaSalidaMasterDto>>> obtenerNotasSalidas() {
+    public ResponseEntity<ResponseDto<List<NotaSalidaMasterDto>>> obtenerNotasSalidas(@RequestHeader (name = "Authorization") String auth) {
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_ADMINISTRADOR,
+                AuthBl.ROLE_CONDUCTOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
         try {
             List<NotaSalidaMasterDto> notasSalidas = notasSalidasBl.seleccionarNotasSalidas();
             return ResponseEntity.ok(new ResponseDto<>(200, notasSalidas, "Notas de salida obtenidas correctamente"));

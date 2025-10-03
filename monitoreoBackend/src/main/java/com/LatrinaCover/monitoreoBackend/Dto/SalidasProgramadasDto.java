@@ -1,5 +1,7 @@
 package com.LatrinaCover.monitoreoBackend.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class SalidasProgramadasDto {
@@ -13,6 +15,7 @@ public class SalidasProgramadasDto {
     private Integer estadoEntrega;
     private Integer ordenPrioridadRuta;
     private String ubicacionEntrega;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime fechaEntregaConfirmada;
     private Integer status;
 

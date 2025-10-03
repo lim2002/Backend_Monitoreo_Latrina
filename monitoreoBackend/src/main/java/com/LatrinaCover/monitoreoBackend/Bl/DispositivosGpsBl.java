@@ -27,9 +27,14 @@ public class DispositivosGpsBl {
         dispositivoGpsDto.setIdDispositivo(dispositivosGps.getIdDispositivo());
         return dispositivoGpsDto;
     }
-    //Mostrar dispositivos GPS con  status 1
-    public List<DispositivosGpsDto> getDispositivosGps(){
-        List<DispositivosGps> dispositivosGps = dispositivosGpsRepository.findByStatus(1);
+    //Mostrar dispositivos GPS
+    public List<DispositivosGpsDto> getDispositivosGps(String q){
+        List<DispositivosGps> dispositivosGps;
+        if (q.equals("all")) {
+            dispositivosGps = dispositivosGpsRepository.findByStatus();
+        }else {
+            dispositivosGps = dispositivosGpsRepository.findByAll(q);
+        }
         List<DispositivosGpsDto> dispositivosGpsDtos = new ArrayList<>();
         for (DispositivosGps dispositivoGps : dispositivosGps) {
             dispositivosGpsDtos.add(new DispositivosGpsDto(dispositivoGps.getIdDispositivo(), dispositivoGps.getCodigo(), dispositivoGps.getModelo(), dispositivoGps.getActivo(), dispositivoGps.getStatus()));
@@ -45,6 +50,9 @@ public class DispositivosGpsBl {
         }
         return dispositivosGpsDtos;
     }
+
+
+
 
     //Modificar dispositivo GPS
     public void updateDispositivoGps(DispositivosGpsDto dispositivoGpsDto){

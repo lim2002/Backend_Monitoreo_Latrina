@@ -30,6 +30,20 @@ public interface VehiculosRepository extends JpaRepository<Vehiculos, Integer> {
        """)
     public List<Vehiculos> findDisponiblesParaProgramar(@Param("fecha") LocalDate fecha);
 
+    //mostrar todos los vehiculos
+    @Query("""
+        SELECT v
+        FROM Vehiculos v
+        WHERE v.status = 1
+          AND (
+                :q IS NULL OR TRIM(:q) = ''
+                OR UPPER(v.placa)  LIKE UPPER(CONCAT('%', :q, '%'))
+                OR UPPER(v.modelo) LIKE UPPER(CONCAT('%', :q, '%'))
+          )
+        ORDER BY v.placa ASC
+        """)
+    List<Vehiculos> findAllOrFilterByPlacaOrModelo(@Param("q") String q);
+
 
 
 }
