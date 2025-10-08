@@ -16,7 +16,7 @@ public class AuthBl {
     // === Mueve esto a application.properties o variables de entorno ===
     // Debe ser la MISMA clave que usas para firmar y de ≥32 chars
     private static final String SECRET = "latrina20258-sdhfjdshjrsoskjfssdfhsdfhjsdfh";
-    private static final long EXP_3_HOURS_MS = 3L * 60 * 60 * 1000; // 3 horas
+    private static final long EXP_3_HOURS_MS = 8L * 60 * 60 * 1000; // 3 horas
     private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
     // === Roles (ajusta el id real de ADMINISTRADOR a tu SecRoleId) ===

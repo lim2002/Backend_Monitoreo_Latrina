@@ -4,6 +4,7 @@ import com.LatrinaCover.monitoreoBackend.Bl.AuthBl;
 import com.LatrinaCover.monitoreoBackend.Bl.UsuariosBl;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import com.LatrinaCover.monitoreoBackend.Dto.UsuariosDto;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -56,8 +57,8 @@ public class UsuariosApi {
     }
 
     //obtener todos los usuarios conductores o filtrar por nombre
-    @GetMapping(path = "/conductores/{q}")
-    public ResponseEntity<ResponseDto<List<UsuariosDto>>> getAllOrByNombreConductores(@PathVariable String q, @RequestHeader ("Authorization") String auth) {
+    @GetMapping(path = "/conductores/all")
+    public ResponseEntity<ResponseDto<List<UsuariosDto>>> getAllOrByNombreConductores(@RequestParam(required = false) String nombre, @RequestHeader ("Authorization") String auth) {
         AuthBl.AuthzResult az = authBl.validateAndAuthorize(
                 auth,
                 AuthBl.ROLE_ADMINISTRADOR
@@ -72,7 +73,7 @@ public class UsuariosApi {
                     .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
         }
 
-        List<UsuariosDto> usuarios = usuariosBl.getAllOrByNombreConductores(q);
+        List<UsuariosDto> usuarios = usuariosBl.getAllOrByNombreConductores(nombre);
         try {
             return ResponseEntity.ok(new ResponseDto<>(200, usuarios, "Conductores encontrados"));
         } catch (Exception e) {

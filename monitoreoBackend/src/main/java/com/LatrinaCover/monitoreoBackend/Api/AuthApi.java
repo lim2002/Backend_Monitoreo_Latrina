@@ -21,7 +21,7 @@ public class AuthApi {
     private AuthBl authBl;
 
     // autenticarse
-    @PostMapping(path = "/login/{id}/{role}/{llave}")
+    @GetMapping(path = "/login/{id}/{role}/{llave}")
     public ResponseEntity<ResponseDto<String>> login(@PathVariable Integer id, @PathVariable Integer role, @PathVariable String llave) {
         try {
             if (!"latrina2025".equals(llave)) {

@@ -6,7 +6,8 @@ public class SalidasProgramadasDetalleDto {
 
     private Integer idSalidaProgramadaDetalle;
     private Integer idSalidaProgramada;
-    private Integer idNotaSalidaDetalle;
+    private Integer idNotaSalida;
+    private Short idNotaSalidaDetalle;
     private String productoNombre;
     private String productoCodigo;
     private Integer cantidad;
@@ -19,9 +20,10 @@ public class SalidasProgramadasDetalleDto {
     public SalidasProgramadasDetalleDto() {
     }
 
-    public SalidasProgramadasDetalleDto(Integer idSalidaProgramadaDetalle, Integer idSalidaProgramada, Integer idNotaSalidaDetalle, String productoNombre, String productoCodigo, Integer cantidad, String descripcion, BigDecimal precioUnitario, Integer estadoObservacion, Integer estadoEntrega, Integer status) {
+    public SalidasProgramadasDetalleDto(Integer idSalidaProgramadaDetalle, Integer idSalidaProgramada, Integer idNotaSalida, Short idNotaSalidaDetalle, String productoNombre, String productoCodigo, Integer cantidad, String descripcion, BigDecimal precioUnitario, Integer estadoObservacion, Integer estadoEntrega, Integer status) {
         this.idSalidaProgramadaDetalle = idSalidaProgramadaDetalle;
         this.idSalidaProgramada = idSalidaProgramada;
+        this.idNotaSalida = idNotaSalida;
         this.idNotaSalidaDetalle = idNotaSalidaDetalle;
         this.productoNombre = productoNombre;
         this.productoCodigo = productoCodigo;
@@ -52,11 +54,19 @@ public class SalidasProgramadasDetalleDto {
         this.idSalidaProgramada = idSalidaProgramada;
     }
 
-    public Integer getIdNotaSalidaDetalle() {
+    public Integer getIdNotaSalida() {
+        return idNotaSalida;
+    }
+
+    public void setIdNotaSalida(Integer idNotaSalida) {
+        this.idNotaSalida = idNotaSalida;
+    }
+
+    public Short getIdNotaSalidaDetalle() {
         return idNotaSalidaDetalle;
     }
 
-    public void setIdNotaSalidaDetalle(Integer idNotaSalidaDetalle) {
+    public void setIdNotaSalidaDetalle(Short idNotaSalidaDetalle) {
         this.idNotaSalidaDetalle = idNotaSalidaDetalle;
     }
 
@@ -129,6 +139,7 @@ public class SalidasProgramadasDetalleDto {
         return "SalidasProgramadasDetalleDto{" +
                 "idSalidaProgramadaDetalle=" + idSalidaProgramadaDetalle +
                 ", idSalidaProgramada=" + idSalidaProgramada +
+                ", idNotaSalida=" + idNotaSalida +
                 ", idNotaSalidaDetalle=" + idNotaSalidaDetalle +
                 ", productoNombre='" + productoNombre + '\'' +
                 ", productoCodigo='" + productoCodigo + '\'' +

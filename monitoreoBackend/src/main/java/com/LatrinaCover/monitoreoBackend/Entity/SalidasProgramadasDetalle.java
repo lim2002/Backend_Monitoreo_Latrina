@@ -18,11 +18,11 @@ public class SalidasProgramadasDetalle implements Serializable {
     @JoinColumn(name = "id_salida_programada", nullable = false)
     private SalidasProgramadas salidaProgramada;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_nota_salida", nullable = false)
     private NotasSalidas notaSalida;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_nota_salida_detalle", nullable = false)
     private NotasSalidaDetalle notaSalidaDetalle;
 

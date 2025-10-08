@@ -113,7 +113,7 @@ public class SalidasProgramadasBl {
                 salidasProgramadasDetalle.setDescripcion(notasSalidasDetalle.getDescripcion());
                 salidasProgramadasDetalle.setPrecioUnitario(notasSalidasDetalle.getPrecioUnitario());
                 salidasProgramadasDetalle.setEstadoObservacion(2); //1=hay , 2=no hay
-                salidasProgramadasDetalle.setEstadoEntrega(1);// 1=pendiente, 2=en proceso, 3=entregado
+                salidasProgramadasDetalle.setEstadoEntrega(1);// 1=en proceso, 2=entregado, 3=atrasado
                 salidasProgramadasDetalle.setStatus(1);
                 salidasProgramadasDetalleRepository.save(salidasProgramadasDetalle);
             }
