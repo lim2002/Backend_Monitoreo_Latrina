@@ -3,16 +3,16 @@ package com.LatrinaCover.monitoreoBackend.Dto;
 public class ObservacionEntregasDto {
 
     private Integer idObservacionEntrega;
-    private Integer idConductor;
+    private Short idConductor;
     private Integer idSalidasProgramadasDetalle;
     private String observacion;
-    private String estadoEntrega;
+    private Integer estadoEntrega;
     private Integer status;
 
     public ObservacionEntregasDto() {
     }
 
-    public ObservacionEntregasDto(Integer idObservacionEntrega, Integer idConductor, Integer idSalidasProgramadasDetalle, String observacion, String estadoEntrega, Integer status) {
+    public ObservacionEntregasDto(Integer idObservacionEntrega, Short idConductor, Integer idSalidasProgramadasDetalle, String observacion, Integer estadoEntrega, Integer status) {
         this.idObservacionEntrega = idObservacionEntrega;
         this.idConductor = idConductor;
         this.idSalidasProgramadasDetalle = idSalidasProgramadasDetalle;
@@ -29,11 +29,11 @@ public class ObservacionEntregasDto {
         this.idObservacionEntrega = idObservacionEntrega;
     }
 
-    public Integer getIdConductor() {
+    public Short getIdConductor() {
         return idConductor;
     }
 
-    public void setIdConductor(Integer idConductor) {
+    public void setIdConductor(Short idConductor) {
         this.idConductor = idConductor;
     }
 
@@ -53,11 +53,11 @@ public class ObservacionEntregasDto {
         this.observacion = observacion;
     }
 
-    public String getEstadoEntrega() {
+    public Integer getEstadoEntrega() {
         return estadoEntrega;
     }
 
-    public void setEstadoEntrega(String estadoEntrega) {
+    public void setEstadoEntrega(Integer estadoEntrega) {
         this.estadoEntrega = estadoEntrega;
     }
 

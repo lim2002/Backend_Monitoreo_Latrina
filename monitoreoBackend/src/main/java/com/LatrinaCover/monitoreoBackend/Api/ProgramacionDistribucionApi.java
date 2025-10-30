@@ -90,4 +90,65 @@ public class ProgramacionDistribucionApi {
         }
 
     }
+
+    //obtener todas la programacion de distribucion por conductor
+    @GetMapping(path = "/all-by-conductor")
+    public ResponseEntity<ResponseDto<List<ProgramacionDistribucionLecturaDto>>> getAllProgramacionDistribucionByConductor(
+            @RequestParam Integer idConductor,
+            @RequestParam(required = false) Integer nro,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate desde,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate hasta,
+            @RequestHeader ("Authorization") String auth
+    ){
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_ADMINISTRADOR,
+                AuthBl.ROLE_CONDUCTOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+        // Normalización simple del rango:
+        if (desde != null && hasta == null) hasta = desde;
+        if (desde == null && hasta != null) desde = hasta;
+        List<ProgramacionDistribucionLecturaDto> programaciones = programacionDistribucionBl.getAllProgramacionDistribucionByConductor(idConductor, nro, desde, hasta);
+        try {
+            return ResponseEntity.ok(new ResponseDto<>(200, programaciones, "Programacion de distribucion agregada"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new ResponseDto<>(500, null, "Error al agregar programacion de distribucion"));
+        }
+    }
+
+    //confirmar la programacion de distribucion
+    @PostMapping(path = "/confirm/{idProgramacion}")
+    public ResponseEntity<ResponseDto<String>> confirmarProgramacionDistribucion(@PathVariable Integer idProgramacion, @RequestHeader ("Authorization") String auth) {
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_CONDUCTOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
+        try {
+            programacionDistribucionBl.confirmProgramacionDistribucion(idProgramacion);
+            return ResponseEntity.ok(new ResponseDto<>(200, null, "Programacion de distribucion confirmada"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new ResponseDto<>(500, null, "Error al confirmar programacion de distribucion"));
+        }
+    }
 }

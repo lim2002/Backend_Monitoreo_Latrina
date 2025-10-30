@@ -2,6 +2,7 @@ package com.LatrinaCover.monitoreoBackend.Api;
 
 import com.LatrinaCover.monitoreoBackend.Bl.AuthBl;
 import com.LatrinaCover.monitoreoBackend.Bl.SalidasProgramadasDetalleBl;
+import com.LatrinaCover.monitoreoBackend.Dto.ConfirmarEntregasDto;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import com.LatrinaCover.monitoreoBackend.Dto.SalidasProgramadasDetalleDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,35 @@ public class SalidasProgramadasDetalleApi {
             return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener detalles de salidas programadas"));
         }
     }
+
+    //confirmar salidas porgramadas detalle por idSalidaProgramada
+    @PostMapping(path = "/confirmar/{idSalidaProgramada}")
+    public ResponseEntity<ResponseDto<String>> confirmarSalidasProgramadasDetalle(@PathVariable Integer idSalidaProgramada, @RequestBody List<ConfirmarEntregasDto> confirmarEntregasDtos, @RequestHeader ("Authorization") String auth) {
+        // Lógica para validar el token y la autorización (omitir por brevedad)
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_CONDUCTOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
+        try {
+            // Aquí se llamaría al servicio para confirmar los detalles
+            salidasProgramadasDetalleBl.confirmarSalidasProgramadasDetalle(idSalidaProgramada, confirmarEntregasDtos);
+            return ResponseEntity.ok(new ResponseDto<>(200, null, "Detalles de salidas programadas confirmados"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al confirmar detalles de salidas programadas"));
+        }
+    }
+
+
 
 }

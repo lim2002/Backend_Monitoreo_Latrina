@@ -51,6 +51,13 @@ public class DispositivosGpsBl {
         return dispositivosGpsDtos;
     }
 
+    //Obtener dispositivo GPS por id
+    public DispositivosGpsDto getDispositivoGpsById(Integer idDispositivo){
+        DispositivosGps dispositivosGps = dispositivosGpsRepository.findByIdDispositivoGps(idDispositivo);
+        DispositivosGpsDto dispositivoGpsDto = new DispositivosGpsDto(dispositivosGps.getIdDispositivo(), dispositivosGps.getCodigo(), dispositivosGps.getModelo(), dispositivosGps.getActivo(), dispositivosGps.getStatus());
+        return dispositivoGpsDto;
+    }
+
 
 
 

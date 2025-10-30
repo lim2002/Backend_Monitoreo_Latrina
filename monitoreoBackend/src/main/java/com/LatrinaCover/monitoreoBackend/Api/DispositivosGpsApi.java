@@ -102,6 +102,32 @@ public class DispositivosGpsApi {
         }
     }
 
+    //obtener un dispositivo gps por id
+    @GetMapping(path = "/id/{idDispositivo}")
+    public ResponseEntity<ResponseDto<DispositivosGpsDto>> getDispositivoGpsById(@PathVariable Integer idDispositivo, @RequestHeader ("Authorization") String auth) {
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_ADMINISTRADOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
+        try {
+            DispositivosGpsDto dispositivo = dispositivosGpsBl.getDispositivoGpsById(idDispositivo);
+            return ResponseEntity.ok(new ResponseDto<>(200, dispositivo, "Dispositivo GPS obtenido"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener dispositivo GPS"));
+        }
+    }
+
     //modificar un dispositivo gps
     @PutMapping(path = "/update")
     public ResponseEntity<ResponseDto<DispositivosGpsDto>> updateDispositivoGps(@RequestBody DispositivosGpsDto dispositivosGpsDto, @RequestHeader ("Authorization") String auth) {

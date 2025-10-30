@@ -26,4 +26,7 @@ public interface DispositivosGpsRepository extends JpaRepository<DispositivosGps
     public DispositivosGps findByIdDispositivoGps(Integer idDispositivoGps);
 
 
+
+
+
 }

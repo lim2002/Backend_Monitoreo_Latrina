@@ -12,4 +12,8 @@ public interface SalidasProgramadasRepository extends JpaRepository<SalidasProgr
     //obtener las salida programadas por id programacion
     @Query("SELECT s FROM SalidasProgramadas s WHERE s.programacion.idProgramacion = ?1" )
     public List<SalidasProgramadas> findByIdProgramacion(Integer idProgramacion);
+
+    //obtener las salida programadas por id salida programada
+    @Query("SELECT s FROM SalidasProgramadas s WHERE s.idSalidaProgramada = ?1" )
+    public SalidasProgramadas findByIdSalidaProgramada(Integer idSalidaProgramada);
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +99,34 @@ public class ProgramacionDistribucionBl {
                 .toList();
     }
 
+    //Mostrar todas la programacion de dsitribucion por conductor
+    @Transactional
+    public List<ProgramacionDistribucionLecturaDto> getAllProgramacionDistribucionByConductor(
+            Integer idConductor, Integer nro, LocalDate desde, LocalDate hasta) {
 
+        List<ProgramacionDistribucion> list =
+                programacionDistribucionRepository.findAllByConductorRequiredAndFecha(idConductor, nro, desde, hasta);
+
+        return list.stream()
+                .map(p -> new ProgramacionDistribucionLecturaDto(
+                        p.getIdProgramacion(),
+                        p.getVehiculo(),         // se convierte a VehiculosDto adentro
+                        p.getConductor(),        // se convierte a UsuariosDto adentro
+                        p.getAdministrador(),    // se convierte a UsuariosDto adentro
+                        p.getFechaCreacion(),
+                        p.getEstadoEntrega(),
+                        p.getFechaEntrega(),
+                        p.getStatus()
+                ))
+                .toList();
+    }
+
+    //confirmar la programacion de distribucion (estado 2)
+    public void confirmProgramacionDistribucion(Integer idProgramacionDistribucion) {
+        ProgramacionDistribucion programacionDistribucion = programacionDistribucionRepository.findByIdProgramacion(idProgramacionDistribucion);
+        programacionDistribucion.setEstadoEntrega(2);
+        programacionDistribucionRepository.save(programacionDistribucion);
+    }
 
 
     //eliminar programacion de distribucion (status 0)
@@ -106,6 +134,7 @@ public class ProgramacionDistribucionBl {
         ProgramacionDistribucion programacionDistribucion = new ProgramacionDistribucion();
         programacionDistribucion.setIdProgramacion(idProgramacionDistribucion);
         programacionDistribucion.setStatus(0);
+
         programacionDistribucionRepository.save(programacionDistribucion);
     }
 

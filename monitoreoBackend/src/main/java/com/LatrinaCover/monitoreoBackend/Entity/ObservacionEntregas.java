@@ -25,7 +25,7 @@ public class ObservacionEntregas implements Serializable {
     private String observacion;
 
     @Column(name = "estado_entrega", nullable = false)
-    private String estadoEntrega;
+    private Integer estadoEntrega;
 
     @Column(name = "status", nullable = false)
     private Integer status;
@@ -33,7 +33,7 @@ public class ObservacionEntregas implements Serializable {
     public ObservacionEntregas() {
     }
 
-    public ObservacionEntregas(Integer idObservacionEntrega, Usuarios conductor, SalidasProgramadasDetalle salidasProgramadasDetalle, String observacion, String estadoEntrega, Integer status) {
+    public ObservacionEntregas(Integer idObservacionEntrega, Usuarios conductor, SalidasProgramadasDetalle salidasProgramadasDetalle, String observacion, Integer estadoEntrega, Integer status) {
         this.idObservacionEntrega = idObservacionEntrega;
         this.conductor = conductor;
         this.salidasProgramadasDetalle = salidasProgramadasDetalle;
@@ -66,11 +66,11 @@ public class ObservacionEntregas implements Serializable {
         this.salidasProgramadasDetalle = salidasProgramadasDetalle;
     }
 
-    public String getEstadoEntrega() {
+    public Integer getEstadoEntrega() {
         return estadoEntrega;
     }
 
-    public void setEstadoEntrega(String estadoEntrega) {
+    public void setEstadoEntrega(Integer estadoEntrega) {
         this.estadoEntrega = estadoEntrega;
     }
 
