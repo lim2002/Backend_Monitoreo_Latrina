@@ -1,6 +1,8 @@
 package com.LatrinaCover.monitoreoBackend.Repository;
 
 import com.LatrinaCover.monitoreoBackend.Entity.Vehiculos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +14,7 @@ public interface VehiculosRepository extends JpaRepository<Vehiculos, Integer> {
     // Aquí puedes agregar métodos personalizados si es necesario
     //Obtener todos los vehiculos status = 1
     @Query("SELECT v FROM Vehiculos v WHERE v.status = 1")
-    public List<Vehiculos> findAllVehiculos();
+    public Page<Vehiculos> findAllVehiculos(Pageable pageable);
 
     //obtener todos los vehiculos con status 1 y que en la tabla de programacion de distribucion el estado de la entrega este en 3
     @Query("""
@@ -42,8 +44,28 @@ public interface VehiculosRepository extends JpaRepository<Vehiculos, Integer> {
           )
         ORDER BY v.placa ASC
         """)
-    List<Vehiculos> findAllOrFilterByPlacaOrModelo(@Param("q") String q);
+    Page<Vehiculos> findAllOrFilterByPlacaOrModelo(@Param("q") String q, Pageable pageable);
 
 
 
+    Vehiculos findByIdVehiculo(Integer idVehiculo);
+
+    //obtener el id del dispositivo por id vehiculo
+    @Query("SELECT v.dispositivo.idDispositivo FROM Vehiculos v WHERE v.idVehiculo = ?1")
+    public Integer findIdDispositivoByIdVehiculo(Integer idVehiculo);
+
+    //verificar si el vehiculo no tiene programacion de distribucion activa para una fecha dada
+    @Query("""
+        SELECT CASE 
+                 WHEN COUNT(p) > 0 THEN true
+                 ELSE false
+               END
+        FROM ProgramacionDistribucion p
+        WHERE p.vehiculo.idVehiculo = :idVehiculo
+          AND p.fechaEntrega = :fecha
+          AND p.estadoEntrega IN (0, 1)
+          AND p.status = 1
+        """)
+    public Boolean existsActiveProgramacionForVehiculoOnDate(@Param("idVehiculo") Integer idVehiculo,
+                                                             @Param("fecha") LocalDate fecha);
 }

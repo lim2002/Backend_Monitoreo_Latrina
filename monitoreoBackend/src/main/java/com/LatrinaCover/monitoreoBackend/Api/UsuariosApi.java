@@ -6,6 +6,7 @@ import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import com.LatrinaCover.monitoreoBackend.Dto.UsuariosDto;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +59,8 @@ public class UsuariosApi {
 
     //obtener todos los usuarios conductores o filtrar por nombre
     @GetMapping(path = "/conductores/all")
-    public ResponseEntity<ResponseDto<List<UsuariosDto>>> getAllOrByNombreConductores(@RequestParam(required = false) String nombre, @RequestHeader ("Authorization") String auth) {
+    public ResponseEntity<ResponseDto<Page<UsuariosDto>>> getAllOrByNombreConductores(@RequestParam(required = false) String nombre,@RequestParam(defaultValue = "0") Integer page,
+                                                                                      @RequestParam(defaultValue = "20") Integer size, @RequestHeader ("Authorization") String auth) {
         AuthBl.AuthzResult az = authBl.validateAndAuthorize(
                 auth,
                 AuthBl.ROLE_ADMINISTRADOR
@@ -73,7 +75,7 @@ public class UsuariosApi {
                     .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
         }
 
-        List<UsuariosDto> usuarios = usuariosBl.getAllOrByNombreConductores(nombre);
+        Page<UsuariosDto> usuarios = usuariosBl.getAllOrByNombreConductores(nombre, page, size);
         try {
             return ResponseEntity.ok(new ResponseDto<>(200, usuarios, "Conductores encontrados"));
         } catch (Exception e) {
@@ -112,6 +114,32 @@ public class UsuariosApi {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener usuario"));
+        }
+    }
+
+    //obtener todos los condutores
+    @GetMapping(path = "/conductores")
+    public ResponseEntity<ResponseDto<List<UsuariosDto>>> getAllConductores(@RequestHeader ("Authorization") String auth) {
+        AuthBl.AuthzResult az = authBl.validateAndAuthorize(
+                auth,
+                AuthBl.ROLE_ADMINISTRADOR
+        );
+
+        if (!az.isTokenValid()) {
+            return ResponseEntity.status(401)
+                    .body(new ResponseDto<>(401, null, "No autorizado: " + az.getMessage()));
+        }
+        if (!az.isAuthorized()) {
+            return ResponseEntity.status(403)
+                    .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
+        }
+
+        List<UsuariosDto> usuarios = usuariosBl.getAllConductores();
+        try {
+            return ResponseEntity.ok(new ResponseDto<>(200, usuarios, "Conductores encontrados"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error al obtener conductores"));
         }
     }
 

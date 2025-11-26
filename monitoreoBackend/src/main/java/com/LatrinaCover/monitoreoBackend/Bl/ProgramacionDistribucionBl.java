@@ -12,6 +12,10 @@ import com.LatrinaCover.monitoreoBackend.Repository.UsuariosRepository;
 import com.LatrinaCover.monitoreoBackend.Repository.VehiculosRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -47,7 +51,7 @@ public class ProgramacionDistribucionBl {
         p.setConductor(conductor);
         p.setAdministrador(admin);
         p.setFechaCreacion(dto.getFechaCreacion() != null ? dto.getFechaCreacion() : java.time.LocalDateTime.now());
-        p.setEstadoEntrega(0);
+        p.setEstadoEntrega(0); // 0 = pendiente
         p.setFechaEntrega(dto.getFechaEntrega());
         p.setStatus(1);
 
@@ -79,24 +83,29 @@ public class ProgramacionDistribucionBl {
 
     //Mostrar todas la programacion de dsitribucion
     @Transactional
-    public List<ProgramacionDistribucionLecturaDto> getAllProgramacionDistribucion(
-            Integer nro, LocalDate desde, LocalDate hasta) {
+    public Page<ProgramacionDistribucionLecturaDto> getAllProgramacionDistribucion(
+            Integer nro, LocalDate desde, LocalDate hasta,
+            Integer page, Integer size) {
 
-        List<ProgramacionDistribucion> list =
-                programacionDistribucionRepository.findAllByIdAndFecha(nro, desde, hasta);
+        Pageable pageable = PageRequest.of(page, size);
 
-        return list.stream()
-                .map(p -> new ProgramacionDistribucionLecturaDto(
-                        p.getIdProgramacion(),
-                        p.getVehiculo(),         // se convierte a VehiculosDto adentro
-                        p.getConductor(),        // se convierte a UsuariosDto adentro
-                        p.getAdministrador(),    // se convierte a UsuariosDto adentro
-                        p.getFechaCreacion(),
-                        p.getEstadoEntrega(),
-                        p.getFechaEntrega(),
-                        p.getStatus()
-                ))
-                .toList();
+        Page<ProgramacionDistribucion> list =
+                programacionDistribucionRepository.findAllByIdAndFecha(nro, desde, hasta, pageable);
+
+        List<ProgramacionDistribucionLecturaDto> contenido =
+                list.getContent().stream()
+                        .map(p -> new ProgramacionDistribucionLecturaDto(
+                                p.getIdProgramacion(),
+                                p.getVehiculo(),
+                                p.getConductor(),
+                                p.getAdministrador(),
+                                p.getFechaCreacion(),
+                                p.getEstadoEntrega(),
+                                p.getFechaEntrega(),
+                                p.getStatus()
+                        )).toList();
+
+        return new PageImpl<>(contenido, pageable, list.getTotalElements());
     }
 
     //Mostrar todas la programacion de dsitribucion por conductor
@@ -136,6 +145,55 @@ public class ProgramacionDistribucionBl {
         programacionDistribucion.setStatus(0);
 
         programacionDistribucionRepository.save(programacionDistribucion);
+    }
+
+    //modificar la fecha de entrega de la programacion de distribucion
+    public boolean updateFechaEntregaProgramacionDistribucion(Integer idProgramacionDistribucion, LocalDate nuevaFechaEntrega) {
+        ProgramacionDistribucion data = programacionDistribucionRepository.findByIdProgramacion(idProgramacionDistribucion);
+        //validar si el conductor esta libre en esa fecha
+        if(usuariosRepository.existsProgramacionByIdConductorAndFecha(data.getConductor().getIdUsuario().intValue(), nuevaFechaEntrega)==false) {
+            if (vehiculosRepository.existsActiveProgramacionForVehiculoOnDate(data.getVehiculo().getIdVehiculo(), nuevaFechaEntrega)==false) {
+                ProgramacionDistribucion programacionDistribucion = programacionDistribucionRepository.findByIdProgramacion(idProgramacionDistribucion);
+                programacionDistribucion.setFechaEntrega(nuevaFechaEntrega);
+                programacionDistribucionRepository.save(programacionDistribucion);
+                return true;
+            }
+            else{
+                return false;
+            }
+        }{
+            return false;
+        }
+
+    }
+
+    //eliminar programacion de distribucion por id
+    public void removeProgramacionDistribucionById(Integer idProgramacionDistribucion) {
+        ProgramacionDistribucion programacionDistribucion = programacionDistribucionRepository.findByIdProgramacion(idProgramacionDistribucion);
+        programacionDistribucion.setStatus(0);
+        programacionDistribucionRepository.save(programacionDistribucion);
+    }
+
+    //obtener los datos para los reportes de fecha hasta fecha
+    @Transactional
+    public List<ProgramacionDistribucionLecturaDto> getAllProgramacionDistribucionForReportBetweenDates(
+            LocalDate desde, LocalDate hasta) {
+
+        List<ProgramacionDistribucion> list =
+                programacionDistribucionRepository.findAllForReportBetweenDates(desde, hasta);
+
+        return list.stream()
+                .map(p -> new ProgramacionDistribucionLecturaDto(
+                        p.getIdProgramacion(),
+                        p.getVehiculo(),         // se convierte a VehiculosDto adentro
+                        p.getConductor(),        // se convierte a UsuariosDto adentro
+                        p.getAdministrador(),    // se convierte a UsuariosDto adentro
+                        p.getFechaCreacion(),
+                        p.getEstadoEntrega(),
+                        p.getFechaEntrega(),
+                        p.getStatus()
+                ))
+                .toList();
     }
 
 

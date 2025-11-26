@@ -2,6 +2,7 @@ package com.LatrinaCover.monitoreoBackend.Api;
 
 import com.LatrinaCover.monitoreoBackend.Bl.AuthBl;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
+import com.LatrinaCover.monitoreoBackend.Repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +21,26 @@ public class AuthApi {
     @Autowired
     private AuthBl authBl;
 
+    @Autowired
+    private UsuariosRepository usuariosRepository;
+
+
     // autenticarse
     @GetMapping(path = "/login/{id}/{role}/{llave}")
     public ResponseEntity<ResponseDto<String>> login(@PathVariable Integer id, @PathVariable Integer role, @PathVariable String llave) {
+        String URL_ACCESO = "http://127.0.0.1:3000/#token=";
         try {
             if (!"latrina2025".equals(llave)) {
                 return ResponseEntity.status(401).body(new ResponseDto<>(401, null, "Llave de autenticación incorrecta"));
             }
-            String token = authBl.authenticate(id, role);
-            return ResponseEntity.ok(new ResponseDto<>(200, token, "Autenticación exitosa"));
+            if (usuariosRepository.existsByIdUsuarioAndRoleId(id, role)==true) {
+                String token = authBl.authenticate(id, role);
+                URL_ACCESO += token;
+                return ResponseEntity.ok(new ResponseDto<>(200, URL_ACCESO, "Autenticación exitosa"));
+            }else {
+                return ResponseEntity.status(403).body(new ResponseDto<>(403, null, "Usuario o rol inválido"));
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(new ResponseDto<>(500, null, "Error en la autenticación"));

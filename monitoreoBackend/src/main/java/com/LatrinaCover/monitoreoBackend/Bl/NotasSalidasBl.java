@@ -10,6 +10,7 @@ import com.LatrinaCover.monitoreoBackend.Repository.ClientesRepository;
 import com.LatrinaCover.monitoreoBackend.Repository.NotasSalidasRepository;
 import com.LatrinaCover.monitoreoBackend.Repository.UbicacionClientesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,26 +37,33 @@ public class NotasSalidasBl {
      * SIEMPRE llena los datos del cliente.
      */
     @Transactional(readOnly = true)
-    public List<NotaSalidaMasterDto> seleccionarNotasSalidas() {
+    public Page<NotaSalidaMasterDto> seleccionarNotasSalidas(Integer page, Integer size) {
 
+        // ⏱ Desde qué fecha quieres filtrar
         LocalDateTime from = LocalDateTime.of(2025, 8, 22, 0, 0, 0);
 
-        List<NotasSalidas> notas = notasSalidasRepository
-                .findAllNotasSalidasWithoutSalidasProgramadas(from);
+        // 📄 Configuración de paginación + orden
+        Pageable pageable = PageRequest.of(page, size, Sort.by("fechaSalida").ascending());
 
-        List<NotaSalidaMasterDto> resultado = new ArrayList<>(notas.size());
+        // 🔍 Consulta paginada a la BD
+        Page<NotasSalidas> notas = notasSalidasRepository
+                .findAllNotasSalidasWithoutSalidasProgramadas(from, pageable);
 
-        for (NotasSalidas n : notas) {
+        // 🔁 Convertimos cada NotasSalidas en tu NotaSalidaMasterDto
+        List<NotaSalidaMasterDto> resultado = new ArrayList<>(notas.getContent().size());
+
+        for (NotasSalidas n : notas.getContent()) {
+
             Clientes cli = n.getCliente();
 
-            // --- Cliente (Short)
+            // --- Cliente (igual que tu lógica original)
             ClientesDto cliDto = null;
             Short idCliente = null;
+
             if (cli != null) {
-                idCliente = cli.getIdCliente(); // <-- Short
+                idCliente = cli.getIdCliente();
+
                 cliDto = new ClientesDto();
-                // Asegúrate que ClientesDto.idCliente sea Short; si fuera Integer, usa:
-                // cliDto.setIdCliente(idCliente != null ? idCliente.intValue() : null);
                 cliDto.setIdCliente(idCliente);
                 cliDto.setNombre(cli.getNombre());
                 cliDto.setRepresentante(cli.getRepresentante());
@@ -65,24 +73,27 @@ public class NotasSalidasBl {
                 cliDto.setEmail(cli.getEmail());
             }
 
-            // --- Ubicaciones (lista)
+            // --- Ubicaciones (tu misma lógica, sin cambiar nada)
             List<UbicacionClientesDto> ubicacionesDto = new ArrayList<>();
+
             if (idCliente != null) {
+
                 List<UbicacionClientes> ubicaciones =
                         ubicacionClientesRepository.findUbicacionByIdCliente(idCliente);
 
                 for (UbicacionClientes u : ubicaciones) {
+
                     UbicacionClientesDto udto = new UbicacionClientesDto();
-                    udto.setIdUbicacionCliente(u.getIdUbicacionCliente()); // tipo según tu entidad (Short/Integer)
-                    // Para evitar ciclos, no seteamos el cliente dentro de cada ubicación
-                    // udto.setIdCliente(cliDto);
+                    udto.setIdUbicacionCliente(u.getIdUbicacionCliente());
                     udto.setUbicacion(u.getUbicacion());
                     udto.setNombreDireccion(u.getNombreDireccion());
                     udto.setStatus(u.getStatus());
+
                     ubicacionesDto.add(udto);
                 }
             }
 
+            // --- DTO final (incluye ubicacionesDto como antes)
             NotaSalidaMasterDto dto = new NotaSalidaMasterDto(
                     n.getIdNotaSalida(),
                     cliDto,
@@ -96,6 +107,8 @@ public class NotasSalidasBl {
             resultado.add(dto);
         }
 
-        return resultado;
+        // 📦 Devolvemos la página, pero ahora de DTOs (con ubicaciones incluidas)
+        return new PageImpl<>(resultado, pageable, notas.getTotalElements());
     }
+
 }

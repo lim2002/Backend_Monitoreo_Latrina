@@ -44,7 +44,7 @@ public class SalidasProgramadasBl {
 
         //bucle para extraer la ubicacion de NotasSalidaMasterAddDto
         //origen
-        double lat0 = -16.522623, lon0 = -68.117335;
+        double lat0 = -16.522199, lon0 = -68.152004;
         //Lista
         List<GeoUtils.Punto> puntos = new ArrayList<>();
         //bucle para rellenar la lista de puntos

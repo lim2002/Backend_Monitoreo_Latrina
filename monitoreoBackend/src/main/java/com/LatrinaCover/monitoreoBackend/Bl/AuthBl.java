@@ -23,6 +23,9 @@ public class AuthBl {
     public static final int ROLE_CONDUCTOR      = 104;
     public static final int ROLE_ADMINISTRADOR  = 2; // TODO: reemplaza por el SecRoleId real de ADMIN
 
+    // -------------------- url de acceso con el token --------------------
+
+
     // -------------------- GENERACIÓN (igual que tenías) --------------------
     public String authenticate(Integer id, Integer role) {
         return generateToken(id, role);

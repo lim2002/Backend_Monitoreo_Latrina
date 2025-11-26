@@ -6,6 +6,7 @@ import com.LatrinaCover.monitoreoBackend.Entity.Vehiculos;
 import com.LatrinaCover.monitoreoBackend.Repository.DispositivosGpsRepository;
 import com.LatrinaCover.monitoreoBackend.Repository.VehiculosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,21 +23,27 @@ public class VehiculosBl {
     private DispositivosGpsRepository dispositivosGpsRepository;
 
     //mostrar todos los vehiculos
-    public List<VehiculosDto> getAllVehiculos(String placaOrModelo){
-        List<Vehiculos> vehiculos;
-        if (placaOrModelo.equals("all")){
-            vehiculos = vehiculosRepository.findAllVehiculos();
-        }else {
-            vehiculos = vehiculosRepository.findAllOrFilterByPlacaOrModelo(placaOrModelo);
+    public Page<VehiculosDto> getAllVehiculos(String placaOrModelo, Integer page, Integer size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+
+        Page<Vehiculos> vehiculosPage;
+
+        if ("all".equalsIgnoreCase(placaOrModelo)) {
+            vehiculosPage = vehiculosRepository.findAllVehiculos(pageable);
+        } else {
+            vehiculosPage = vehiculosRepository.findAllOrFilterByPlacaOrModelo(placaOrModelo, pageable);
         }
 
-        List<VehiculosDto> vehiculosDto = new ArrayList<>();
-        for (Vehiculos vehiculo : vehiculos) {
+        List<VehiculosDto> vehiculosDto = new ArrayList<>(vehiculosPage.getContent().size());
+
+        for (Vehiculos vehiculo : vehiculosPage.getContent()) {
             vehiculosDto.add(new VehiculosDto(
                     vehiculo.getIdVehiculo(),
                     vehiculo.getDispositivo().getIdDispositivo(),
-                    vehiculo.getMarca(),                 // marca correcto
-                    vehiculo.getPlaca(),                 // placa correcto
+                    vehiculo.getMarca(),
+                    vehiculo.getPlaca(),
                     vehiculo.getModelo(),
                     vehiculo.getAnio(),
                     vehiculo.getCapacidadKg(),
@@ -45,7 +52,9 @@ public class VehiculosBl {
                     vehiculo.getStatus()
             ));
         }
-        return vehiculosDto;
+
+        // devolver Page<VehiculosDto> manteniendo totalElements y paginación
+        return new PageImpl<>(vehiculosDto, pageable, vehiculosPage.getTotalElements());
     }
 
     //obtener todos lo vehiculos disponibles para entrega
@@ -94,11 +103,7 @@ public class VehiculosBl {
 
     // Modificar vehiculo
     public void updateVehiculo(VehiculosDto vehiculoDto){
-        DispositivosGps dispositivo = new DispositivosGps();
-        Vehiculos vehiculo = new Vehiculos();
-        dispositivo.setIdDispositivo(vehiculoDto.getIdDispositivoGps());
-        vehiculo.setIdVehiculo(vehiculoDto.getIdVehiculo());
-        vehiculo.setDispositivo(dispositivo);
+        Vehiculos vehiculo = vehiculosRepository.findByIdVehiculo(vehiculoDto.getIdVehiculo());
         vehiculo.setPlaca(vehiculoDto.getPlaca());
         vehiculo.setMarca(vehiculoDto.getMarca());
         vehiculo.setModelo(vehiculoDto.getModelo());
@@ -106,16 +111,20 @@ public class VehiculosBl {
         vehiculo.setCapacidadKg(vehiculoDto.getCapacidadKg());
         vehiculo.setEstadoVehiculo(vehiculoDto.getEstadoVehiculo());
         vehiculo.setFechaUltimoMantenimiento(vehiculoDto.getFechaUltimoMantenimiento());
-        vehiculo.setStatus(vehiculoDto.getStatus());
         vehiculosRepository.save(vehiculo);
     }
 
     //Eliminar vehiculo (status 0)
     public void deleteVehiculo(Integer idVehiculo){
-        Vehiculos vehiculo = new Vehiculos();
-        vehiculo.setIdVehiculo(idVehiculo);
-        vehiculo.setStatus(0);
+        Vehiculos vehiculo = vehiculosRepository.findByIdVehiculo(idVehiculo);
+        vehiculo.setStatus(0); // 0=eliminado
         vehiculosRepository.save(vehiculo);
+        //obtener el id del dispositivo gps asignado al vehiculo
+        Integer idDispositivoGps = vehiculosRepository.findIdDispositivoByIdVehiculo(idVehiculo);
+        DispositivosGps dispositivoActualizado = dispositivosGpsRepository.findByIdDispositivoGps(idDispositivoGps);
+        dispositivoActualizado.setActivo(1); // 1=disponible ; 2=asignado a un vehiculo; 0=eliminado
+        dispositivosGpsRepository.save(dispositivoActualizado);
+
     }
 
 

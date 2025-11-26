@@ -5,6 +5,7 @@ import com.LatrinaCover.monitoreoBackend.Bl.VehiculosBl;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import com.LatrinaCover.monitoreoBackend.Dto.VehiculosDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,8 @@ public class VehiculosApi {
 
     //Mostrar todos los vehiculos
     @GetMapping(path = "/{PlacaOrModelo}")
-    public ResponseEntity<ResponseDto<List<VehiculosDto>>> getAllVehiculos(@PathVariable String PlacaOrModelo, @RequestHeader ("Authorization") String auth) {
+    public ResponseEntity<ResponseDto<Page<VehiculosDto>>> getAllVehiculos(@PathVariable String PlacaOrModelo, @RequestParam(defaultValue = "0") Integer page,
+                                                                           @RequestParam(defaultValue = "20") Integer size, @RequestHeader ("Authorization") String auth) {
         AuthBl.AuthzResult az = authBl.validateAndAuthorize(
                 auth,
                 AuthBl.ROLE_ADMINISTRADOR
@@ -45,7 +47,7 @@ public class VehiculosApi {
                     .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
         }
 
-        List<VehiculosDto> vehiculos = vehiculosBl.getAllVehiculos(PlacaOrModelo);
+        Page<VehiculosDto> vehiculos = vehiculosBl.getAllVehiculos(PlacaOrModelo, page, size);
         try {
             return ResponseEntity.ok(new ResponseDto<>(200, vehiculos, "Vehiculos encontrados"));
         } catch (Exception e) {

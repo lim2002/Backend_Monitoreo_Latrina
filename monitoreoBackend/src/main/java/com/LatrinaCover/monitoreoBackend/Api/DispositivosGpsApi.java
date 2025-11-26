@@ -5,6 +5,7 @@ import com.LatrinaCover.monitoreoBackend.Bl.DispositivosGpsBl;
 import com.LatrinaCover.monitoreoBackend.Dto.DispositivosGpsDto;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +80,8 @@ public class DispositivosGpsApi {
 
     //mostrar dispositivos gps todos o por imei o modelo
     @GetMapping(path = "/{buscar}")
-    public ResponseEntity<ResponseDto<List<DispositivosGpsDto>>> getDispositivosGps(@RequestHeader ("Authorization") String auth, @PathVariable String buscar) {
+    public ResponseEntity<ResponseDto<Page<DispositivosGpsDto>>> getDispositivosGps(@RequestHeader ("Authorization") String auth, @PathVariable String buscar, @RequestParam(defaultValue = "0") Integer page,
+                                                                                    @RequestParam(defaultValue = "20") Integer size) {
         AuthBl.AuthzResult az = authBl.validateAndAuthorize(
                 auth,
                 AuthBl.ROLE_ADMINISTRADOR
@@ -93,7 +95,7 @@ public class DispositivosGpsApi {
             return ResponseEntity.status(403)
                     .body(new ResponseDto<>(403, null, "Acceso denegado: " + az.getMessage()));
         }
-        List<DispositivosGpsDto> dispositivos = dispositivosGpsBl.getDispositivosGps(buscar);
+        Page<DispositivosGpsDto> dispositivos = dispositivosGpsBl.getDispositivosGps(buscar, page, size);
         try {
             return ResponseEntity.ok(new ResponseDto<>(200, dispositivos, "Dispositivos GPS "));
         } catch (Exception e) {

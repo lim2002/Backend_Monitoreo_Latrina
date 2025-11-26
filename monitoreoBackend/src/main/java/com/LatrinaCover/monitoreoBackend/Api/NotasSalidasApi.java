@@ -6,6 +6,7 @@ import com.LatrinaCover.monitoreoBackend.Bl.NotasSalidasBl;
 import com.LatrinaCover.monitoreoBackend.Dto.NotaSalidaMasterDto;
 import com.LatrinaCover.monitoreoBackend.Dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,11 @@ public class NotasSalidasApi {
     private AuthBl authBl;
 
     @GetMapping(path = "/obtener")
-    public ResponseEntity<ResponseDto<List<NotaSalidaMasterDto>>> obtenerNotasSalidas(@RequestHeader (name = "Authorization") String auth) {
+    public ResponseEntity<ResponseDto<Page<NotaSalidaMasterDto>>> obtenerNotasSalidas(
+            @RequestHeader(name = "Authorization") String auth,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "8") Integer size
+    ) {
         AuthBl.AuthzResult az = authBl.validateAndAuthorize(
                 auth,
                 AuthBl.ROLE_ADMINISTRADOR,
@@ -46,11 +51,18 @@ public class NotasSalidasApi {
         }
 
         try {
-            List<NotaSalidaMasterDto> notasSalidas = notasSalidasBl.seleccionarNotasSalidas();
-            return ResponseEntity.ok(new ResponseDto<>(200, notasSalidas, "Notas de salida obtenidas correctamente"));
+            Page<NotaSalidaMasterDto> notasSalidas =
+                    notasSalidasBl.seleccionarNotasSalidas(page, size);
+
+            return ResponseEntity.ok(
+                    new ResponseDto<>(200, notasSalidas, "Notas de salida obtenidas correctamente")
+            );
+
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok(new ResponseDto<>(500, null, "Error al obtener las notas de salida"));
+            return ResponseEntity.status(500)
+                    .body(new ResponseDto<>(500, null, "Error al obtener las notas de salida"));
         }
     }
+
 }

@@ -1,6 +1,8 @@
 package com.LatrinaCover.monitoreoBackend.Repository;
 
 import com.LatrinaCover.monitoreoBackend.Entity.DispositivosGps;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,11 +13,11 @@ public interface DispositivosGpsRepository extends JpaRepository<DispositivosGps
 
     //Listado de los dispositivos GPS por estado 1 y por imei o modelo
     @Query("SELECT d FROM DispositivosGps d WHERE d.status = 1 AND (d.codigo LIKE %?1% OR d.modelo LIKE %?1%)" )
-    public List<DispositivosGps> findByAll(String q);
+    public Page<DispositivosGps> findByAll(String q, Pageable pageable);
 
     //Listado de los dispositivos GPS por estado 1
     @Query("SELECT d FROM DispositivosGps d WHERE d.status = 1" )
-    public List<DispositivosGps> findByStatus();
+    public Page<DispositivosGps> findByStatus(Pageable pageable);
 
     //Listado de los dispositivos GPS por estado y activo 1
     @Query("SELECT d FROM DispositivosGps d WHERE d.status = ?1 AND d.activo = ?2" )

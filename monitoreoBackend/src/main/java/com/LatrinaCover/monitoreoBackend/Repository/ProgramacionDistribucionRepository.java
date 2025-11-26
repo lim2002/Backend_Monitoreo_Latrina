@@ -1,6 +1,8 @@
 package com.LatrinaCover.monitoreoBackend.Repository;
 
 import com.LatrinaCover.monitoreoBackend.Entity.ProgramacionDistribucion;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,10 +27,11 @@ public interface ProgramacionDistribucionRepository extends JpaRepository<Progra
           AND (:hasta  IS NULL OR p.fechaEntrega <= :hasta)
         ORDER BY p.fechaEntrega DESC, p.idProgramacion DESC
     """)
-    List<ProgramacionDistribucion> findAllByIdAndFecha(
+    Page<ProgramacionDistribucion> findAllByIdAndFecha(
             @Param("idProg") Integer idProg,
             @Param("desde")  LocalDate desde,
-            @Param("hasta")  LocalDate hasta
+            @Param("hasta")  LocalDate hasta,
+            Pageable pageable
     );
 
 
@@ -53,6 +56,20 @@ public interface ProgramacionDistribucionRepository extends JpaRepository<Progra
     //Obtener programacion de distribucion por idProgramacion
     @Query("SELECT p FROM ProgramacionDistribucion p WHERE p.idProgramacion = ?1" )
     ProgramacionDistribucion findByIdProgramacion(Integer idProgramacion);
+
+    //obtener los datos para los reportes de tal fecha hasta fecha
+    @Query("""
+        SELECT p
+        FROM ProgramacionDistribucion p
+        WHERE p.status = 1
+          AND p.fechaEntrega BETWEEN :desde AND :hasta
+        ORDER BY p.fechaEntrega DESC, p.idProgramacion DESC
+    """)
+    List<ProgramacionDistribucion> findAllForReportBetweenDates(
+            @Param("desde") LocalDate desde,
+            @Param("hasta") LocalDate hasta
+    );
+
 
 
 }

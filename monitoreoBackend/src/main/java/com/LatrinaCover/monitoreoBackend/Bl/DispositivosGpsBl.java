@@ -4,6 +4,10 @@ import com.LatrinaCover.monitoreoBackend.Dto.DispositivosGpsDto;
 import com.LatrinaCover.monitoreoBackend.Entity.DispositivosGps;
 import com.LatrinaCover.monitoreoBackend.Repository.DispositivosGpsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,18 +32,32 @@ public class DispositivosGpsBl {
         return dispositivoGpsDto;
     }
     //Mostrar dispositivos GPS
-    public List<DispositivosGpsDto> getDispositivosGps(String q){
-        List<DispositivosGps> dispositivosGps;
-        if (q.equals("all")) {
-            dispositivosGps = dispositivosGpsRepository.findByStatus();
-        }else {
-            dispositivosGps = dispositivosGpsRepository.findByAll(q);
+    public Page<DispositivosGpsDto> getDispositivosGps(String q, Integer page, Integer size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<DispositivosGps> dispositivosGpsPage;
+
+        if ("all".equalsIgnoreCase(q)) {
+            dispositivosGpsPage = dispositivosGpsRepository.findByStatus(pageable);
+        } else {
+            dispositivosGpsPage = dispositivosGpsRepository.findByAll(q, pageable);
         }
-        List<DispositivosGpsDto> dispositivosGpsDtos = new ArrayList<>();
-        for (DispositivosGps dispositivoGps : dispositivosGps) {
-            dispositivosGpsDtos.add(new DispositivosGpsDto(dispositivoGps.getIdDispositivo(), dispositivoGps.getCodigo(), dispositivoGps.getModelo(), dispositivoGps.getActivo(), dispositivoGps.getStatus()));
+
+        List<DispositivosGpsDto> dispositivosGpsDtos = new ArrayList<>(dispositivosGpsPage.getContent().size());
+
+        for (DispositivosGps dispositivoGps : dispositivosGpsPage.getContent()) {
+            dispositivosGpsDtos.add(new DispositivosGpsDto(
+                    dispositivoGps.getIdDispositivo(),
+                    dispositivoGps.getCodigo(),
+                    dispositivoGps.getModelo(),
+                    dispositivoGps.getActivo(),
+                    dispositivoGps.getStatus()
+            ));
         }
-        return dispositivosGpsDtos;
+
+        // devolvemos paginado, pero de DTOs
+        return new PageImpl<>(dispositivosGpsDtos, pageable, dispositivosGpsPage.getTotalElements());
     }
     //Mostrar dispositivos GPS con activo 1 y status 1
     public List<DispositivosGpsDto> getDispositivosGpsDisponibles(){

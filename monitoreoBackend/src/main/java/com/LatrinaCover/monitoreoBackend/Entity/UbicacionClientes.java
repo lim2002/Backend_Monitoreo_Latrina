@@ -17,13 +17,13 @@ public class UbicacionClientes implements Serializable {
     @JoinColumn(name = "CliCod", nullable = false)
     private Clientes cliente;
 
-    @Column(name = "DirCliGeoreferencia", nullable = false)
+    @Column(name = "DirCliGeoreferencia", nullable = false, columnDefinition = "nchar(1)")
     private String ubicacion;
 
     @Column(name = "DirCliDireccion", nullable = false)
     private String nombreDireccion;
 
-    @Column(name = "DirCliActivo", nullable = false)
+    @Column(name = "DirCliActivo", nullable = false, columnDefinition = "nchar(1)")
     private String status;
 
     public UbicacionClientes() {
